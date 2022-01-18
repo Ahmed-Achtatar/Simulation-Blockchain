@@ -15,16 +15,18 @@
 
 <body>
 
+
+
     <div class="card">
         <h2><svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-coffee" href="#icon-coffee" /></svg>Regular</h2>
         <label class="input">
-          <input class="input__field" type="text" placeholder=" " />
+          <input class="input__field" type="text" placeholder=" " id="myForm"  />
           <span class="input__label">Some Fancy Label</span>
         </label>
         <div class="button-group">
             <button>Send</button>
-            <button type="reset">Reset</button>
+            <button type="reset"  onClick = "fun()">Reset</button>
         </div>
 
         <div id="blockchain">
@@ -52,6 +54,11 @@
             </div>
         </div>
     </div>
+    <script>  
+        function fun(){  
+          document.getElementById("myForm").value="";  
+        }   
+       </script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.3.6.min.js"></script>
     <script src="/js/index.js"></script>
