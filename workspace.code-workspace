@@ -1,0 +1,14 @@
+{
+    "folders": [
+		{
+			"name": "Simulation-Blockchain",
+			"path": "."
+		},
+		{
+			"path": "..\\..\\..\\OneDrive\\Current\\pfe"
+		}
+	],
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": "Simulation-Blockchain"
+    }
+}
