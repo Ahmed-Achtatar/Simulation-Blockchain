@@ -1,20 +1,6 @@
 @import url('assets/_variables.css');
-#blockchain .row {
-    overflow-x: auto;
-    white-space: nowrap;
-}
-
-.col-3 {
-    display: inline-block;
-    float: none;
-}
-
-p {
-    white-space: normal;
-}
-
 @import url('https://rsms.me/inter/inter.css');
- :root {
+:root {
     --color-light: white;
     --color-dark: #212121;
     --color-signal: #fab700;
@@ -30,6 +16,22 @@ p {
     background: var(--color-background);
     font-weight: 300;
     padding: 0 calc(var(--size-bezel) * 3);
+}
+
+#blockchain {}
+
+#blockchain .row {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.col-3 {
+    display: inline-block;
+    float: none;
+}
+
+p {
+    white-space: normal;
 }
 
 h1,
