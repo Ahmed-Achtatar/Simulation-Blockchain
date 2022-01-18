@@ -1,3 +1,14 @@
 @import url('assets/_variables.css');
+#blockchain .row {
+    overflow-x: auto;
+    white-space: nowrap;
+}
 
-body
+.col-3 {
+    display: inline-block;
+    float: none;
+}
+
+p {
+    white-space: normal;
+}
