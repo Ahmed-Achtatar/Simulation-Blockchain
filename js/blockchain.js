@@ -12,7 +12,19 @@ class Block {
         this.prevBlockHash = prevBlock;
         // la date generer lors de la creation de block
         this.timestamp = Date.now();
-    }
+
+}
+      get  getDate()
+  {
+     return Date.now();
+  
+  }
+  
+      get prevBlock()
+      {return this.prevBlock};
+      
+     get getNonce()
+   { return this.nonce;}
 
     getMerkle() {
         // Encryption de l'arbre de merkle (de données) en chaine de caractere
@@ -67,16 +79,38 @@ class Blockchain {
         return this.blocks[key];
     }
 
-    prevBlockFrom(currentBlock) {
-        return this.blocks[currentBlock.prevBlockHash];
-    }
+    //prevBlockFrom(currentBlock) {
+       // retu//rn this.blocks[currentBlock.prevBlockHash];
+    //}
 }
+
+function genTxs() {
+  
+    return  document.getElementById("myForm").value; 
+}
+
+
 
 let genesisBlock = new Block(['genesis', 'block'], 1, null); // block principal du demo
 
 let blockchain = new Blockchain(genesisBlock); // instantiation du blockchain
 
-function genTxs() {
-    let txs = " hello ";
-    return txs;
+function genBlock()
+{
+      blockchain.mineNewBlock(genTxs());
+      let blk = document.getElementById("blocks");
+      
+      Blk.innerHTML += 
+              '<div class="col-3 block">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title border border-secondary p-2 my-2">Nonce:
+                                    <span class="card-text p-1 my-3"></span>
+                                </h5>
+
+                                <h6 class="card-subtitle mb-2 text-muted">hash</h6>';
+
+
 }
+
+
