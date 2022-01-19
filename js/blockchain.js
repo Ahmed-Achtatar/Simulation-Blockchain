@@ -100,15 +100,7 @@ function genBlock()
       blockchain.mineNewBlock(genTxs());
       let blk = document.getElementById("blocks");
       
-      Blk.innerHTML += 
-              '<div class="col-3 block">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title border border-secondary p-2 my-2">Nonce:
-                                    <span class="card-text p-1 my-3"></span>
-                                </h5>
-
-                                <h6 class="card-subtitle mb-2 text-muted">hash</h6>';
+    
 
 
 }
