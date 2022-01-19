@@ -30,9 +30,9 @@ class Block {
 
     getHash() {
         // retourne le hash code de tous les données en chaine de caractere
-        return CryptoJS.SHA256(
-            '01000000' // Decision de validation
-            +
+        return '01000000' // Decision de validation
+        +CryptoJS.SHA256(
+            
             this.prevBlockHash // block precedent en hash
             +
             this.getMerkle() // données en hash 
