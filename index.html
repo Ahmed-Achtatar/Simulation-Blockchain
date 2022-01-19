@@ -25,43 +25,22 @@
           <span class="input__label">Some Fancy Label</span>
         </label>
         <div class="button-group">
-            <button onclick="genBlock()">Send</button>
+            <button id="btn-send" onclick="genBlock()">Send</button>
             <button type="reset" onClick="fun()">Reset</button>
         </div>
 
         <div id="blockchain" class="my-5">
             <div class="container-fluid">
-<<<<<<< HEAD
                 <div id="blocks" class="row flex-row flex-nowrap">
-=======
-                <div class="row flex-row flex-nowrap" id="blocks">
->>>>>>> main
-                    <div class="col-3 block">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title border border-secondary p-2 my-2">Nonce:
-                                    <span class="card-text p-1 my-3"></span>
-                                </h5>
-
-                                <h6 class="card-subtitle mb-2 text-muted">hash</h6>
-                                <p class="card-text border border-dark bg-secondary text-white p-2 my-3"></p>
-
-                                <h6 class="card-subtitle mb-2 text-muted">prevblockhash</h6>
-                                <p class="card-text border border-dark bg-secondary text-white p-2 my-3"></p>
-                                <h6 class="card-subtitle mb-2 text-muted">Date</h6>
-                                <p class="card-text border border-dark bg-secondary text-white p-2 my-3"></p>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.3.6.min.js"></script>
-    <script src="/js/index.js"></script>
-    <script src="/js/blockchain.js"></script>
+    <script src="/node_modules/crypto-js/crypto-js.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/blockchain.js"></script>
 </body>
 
 </html>

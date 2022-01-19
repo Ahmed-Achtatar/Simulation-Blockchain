@@ -1,5 +1,3 @@
-var CryptoJS = require("crypto-js");
-
 function toHex(val) {
     return val.toString(16); // Generer hexadecimal
 }
@@ -21,18 +19,18 @@ class Block {
 
     }
 
-    get prevBlock() { return this.prevBlock };
+    get getprevBlock() { return this.prevBlockHash };
 
     get getNonce() { return this.nonce; }
 
     getMerkle() {
         // Encryption de l'arbre de merkle (de données) en chaine de caractere
-        return SHA256(this.txs.toString()).toString();
+        return CryptoJS.SHA256(this.txs.toString()).toString();
     }
 
     getHash() {
         // retourne le hash code de tous les données en chaine de caractere
-        return SHA256(
+        return CryptoJS.SHA256(
             '01000000' // Decision de validation
             +
             this.prevBlockHash // block precedent en hash
@@ -88,13 +86,35 @@ function genTxs() {
     return document.getElementById("myForm").value;
 }
 
+var genesisBlock = new Block(['genesis', 'block'], 1, null);
+var blockchain = new Blockchain(genesisBlock);
+let generator;
+
+
+// instantiation du blockchain
 
 function genBlock() {
     let a = genTxs();
-    blockchain.mineNewBlock(a);
-    let blk = document.getElementById("blocks");
 
-    blk.insertAdjacentHTML('afterbegin', '<h5 >Nonce:qsdaz</h5>');
+    blockchain.mineNewBlock(genTxs());
+    let blk = document.getElementById("blocks");
+    blk.insertAdjacentHTML('afterbegin', `<div class="col-3 block">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title border border-secondary p-2 my-2">Nonce:
+                <span class="card-text p-1 my-3">` + blockchain.getLastBlock().getNonce + `</span>
+            </h5>
+
+            <h6 class="card-subtitle mb-2 text-muted">hash</h6>
+            <p class="card-text border border-dark bg-secondary text-white p-2 my-3">` + blockchain.getLastBlock().getHash() + `</p>
+
+            <h6 class="card-subtitle mb-2 text-muted">prevblockhash</h6>
+            <p class="card-text border border-dark bg-secondary text-white p-2 my-3">` + blockchain.getLastBlock().getprevBlock + `</p>
+            <h6 class="card-subtitle mb-2 text-muted"> Date</h6>
+            <p class="card-text border border-dark bg-secondary text-white p-2 my-3">` + blockchain.getLastBlock().getDate + `</p>
+        </div>
+    </div>
+</div>`);
 }
 
 function fun() {

@@ -30,6 +30,7 @@
 
 p {
     white-space: normal;
+    font-size: 12px;
 }
 
 h1,
@@ -143,4 +144,8 @@ button+button {
 
 .hidden {
     display: none;
+}
+
+span {
+    font-size: 16px;
 }
