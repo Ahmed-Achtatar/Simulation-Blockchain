@@ -1,3 +1,5 @@
+var CryptoJS = require("crypto-js");
+
 function toHex(val) {
     return val.toString(16); // Generer hexadecimal
 }
@@ -13,27 +15,24 @@ class Block {
         // la date generer lors de la creation de block
         this.timestamp = Date.now();
 
-}
-      get  getDate()
-  {
-     return Date.now();
-  
-  }
-  
-      get prevBlock()
-      {return this.prevBlock};
-      
-     get getNonce()
-   { return this.nonce;}
+    }
+    get getDate() {
+        return Date.now();
+
+    }
+
+    get prevBlock() { return this.prevBlock };
+
+    get getNonce() { return this.nonce; }
 
     getMerkle() {
         // Encryption de l'arbre de merkle (de données) en chaine de caractere
-        return CryptoJS.SHA256(this.txs.toString()).toString();
+        return SHA256(this.txs.toString()).toString();
     }
 
     getHash() {
         // retourne le hash code de tous les données en chaine de caractere
-        return CryptoJS.SHA256(
+        return SHA256(
             '01000000' // Decision de validation
             +
             this.prevBlockHash // block precedent en hash
@@ -80,37 +79,29 @@ class Blockchain {
     }
 
     //prevBlockFrom(currentBlock) {
-       // retu//rn this.blocks[currentBlock.prevBlockHash];
+    // retu//rn this.blocks[currentBlock.prevBlockHash];
     //}
 }
 
 function genTxs() {
-  
-    return  document.getElementById("myForm").value; 
+
+    return document.getElementById("myForm").value;
 }
 
 
 
-let genesisBlock = new Block(['genesis', 'block'], 1, null); // block principal du demo
+let genesisBlock = new Block('genesisblock', 1, null); // block principal du demo
 
-let blockchain = new Blockchain(genesisBlock); // instantiation du blockchain
+var blockchain = new Blockchain(genesisBlock); // instantiation du blockchain
 
-function genBlock()
-{
-      blockchain.mineNewBlock(genTxs());
-      let blk = document.getElementById("blocks");
-      
-      Blk.innerHTML += 
-              '<div class="col-3 block">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title border border-secondary p-2 my-2">Nonce:
-                                    <span class="card-text p-1 my-3"></span>
-                                </h5>
+function genBlock() {
+    let a = genTxs();
+    blockchain.mineNewBlock(a);
+    let blk = document.getElementById("blocks");
 
-                                <h6 class="card-subtitle mb-2 text-muted">hash</h6>';
-
-
+    blk.insertAdjacentHTML('afterbegin', '<h5 >Nonce:qsdaz</h5>');
 }
 
-
+function fun() {
+    document.getElementById("myForm").value = "";
+}
