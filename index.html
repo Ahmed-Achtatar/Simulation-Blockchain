@@ -15,28 +15,27 @@
 
 <body>
 
-<<<<<<< HEAD
-
-
     <div class="card">
         <h2><svg class="icon" aria-hidden="true">
-=======
     <div class="card my-5">
         <h2 class="my-3"><svg class="icon" aria-hidden="true">
->>>>>>> 6c5fcea439249cc3e49ba77e06c0cfac0a7793e6
           <use xlink:href="#icon-coffee" href="#icon-coffee" /></svg>Regular</h2>
         <label class="input">
           <input class="input__field" type="text" placeholder=" " id="myForm"  />
           <span class="input__label">Some Fancy Label</span>
         </label>
         <div class="button-group">
-            <button>Send</button>
-            <button type="reset"  onClick = "fun()">Reset</button>
+            <button onclick="genBlock()">Send</button>
+            <button type="reset" onClick="fun()">Reset</button>
         </div>
 
         <div id="blockchain" class="my-5">
             <div class="container-fluid">
+<<<<<<< HEAD
                 <div id="blocks" class="row flex-row flex-nowrap">
+=======
+                <div class="row flex-row flex-nowrap" id="blocks">
+>>>>>>> main
                     <div class="col-3 block">
                         <div class="card" style="width: 18rem;">
                             <div class="card-body">
@@ -59,14 +58,10 @@
             </div>
         </div>
     </div>
-    <script>  
-        function fun(){  
-          document.getElementById("myForm").value="";  
-        }   
-       </script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.3.6.min.js"></script>
     <script src="/js/index.js"></script>
+    <script src="/js/blockchain.js"></script>
 </body>
 
 </html>
