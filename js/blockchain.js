@@ -14,10 +14,7 @@ class Block {
         this.timestamp = Date.now();
 
     }
-    get getDate() {
-        return Date.now();
-
-    }
+    get getDate() {return Date.now();}
 
     get getprevBlock() { return this.prevBlockHash };
 
