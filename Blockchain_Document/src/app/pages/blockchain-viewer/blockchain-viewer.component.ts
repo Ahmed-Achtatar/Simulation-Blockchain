@@ -19,13 +19,13 @@ export class BlockchainViewerComponent implements OnInit {
   ngOnInit() {
   }
 
-  showTransactions(block) {
+  showTransactions(block: any) {
     console.log(block);
     this.selectedBlock = block;
     return false;
   }
 
-  blockHasTx(block) {
+  blockHasTx(block: any) {
     return block.transactions.length > 0;
   }
 
@@ -33,11 +33,11 @@ export class BlockchainViewerComponent implements OnInit {
     return this.blockHasTx(this.selectedBlock);
   }
 
-  isSelectedBlock(block) {
+  isSelectedBlock(block: any) {
     return this.selectedBlock === block;
   }
 
-  getBlockNumber(block) {
+  getBlockNumber(block: any) {
     return this.blocks.indexOf(block) + 1;
   }
 }

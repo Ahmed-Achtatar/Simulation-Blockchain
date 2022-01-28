@@ -1,7 +1,8 @@
-const cr = require('crypto-browserify');
-const crypto = require('crypto');
-const EC = require('elliptic').ec;
+import crypto from 'crypto';
+import { SHA256 } from 'crypto-js';
+import { ec as EC } from 'elliptic';
 const ec = new EC('secp256k1');
+
 
 class Transaction {
     /**
@@ -22,7 +23,7 @@ class Transaction {
      * @returns {string}
      */
     calculateHash() {
-        return crypto.createHash('sha256').update(this.fromAddress + this.toAddress + this.amount + this.timestamp).digest('hex');
+        return SHA256(this.fromAddress + this.toAddress + this.amount + this.timestamp);
     }
 
     /**
@@ -90,7 +91,7 @@ class Block {
      * @returns {string}
      */
     calculateHash() {
-        return crypto.createHash('sha256').update(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).digest('hex');
+        return SHA256(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce);
     }
 
     /**
@@ -286,6 +287,9 @@ class Blockchain {
     }
 }
 
-module.exports.Blockchain = Blockchain;
-module.exports.Block = Block;
-module.exports.Transaction = Transaction;
+const _Blockchain = Blockchain;
+export { _Blockchain as Blockchain };
+const _Block = Block;
+export { _Block as Block };
+const _Transaction = Transaction;
+export { _Transaction as Transaction };
