@@ -11,6 +11,8 @@ class Transaction {
 	public timestamp: any;
 	public signature: any;
 
+
+
     /** 
      * @param {string} fromAddress
      * @param {string} toAddress
@@ -22,6 +24,7 @@ class Transaction {
         this.amount = amount;
         this.timestamp = Date.now();
     }
+    
 
     /*
      * Creates a SHA256 hash of the transaction

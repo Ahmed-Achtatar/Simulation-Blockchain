@@ -10,11 +10,11 @@ import { Transaction } from "src/app/blockchain_script/blockchain";
   styleUrls: ['./create-transaction.component.scss']
 })
 export class CreateTransactionComponent implements OnInit {
-  public newTx = new Transaction();
+  public newTx = new Transaction(0,0,0);
   public ownWalletKey: IWalletKey;
 
   constructor(private blockchainService: BlockchainService, private router: Router) {
-    this.newTx = new Transaction();
+    this.newTx = new Transaction(0,0,0);
     this.ownWalletKey = blockchainService.walletKeys[0];
   }
 
@@ -36,6 +36,6 @@ export class CreateTransactionComponent implements OnInit {
     }
 
     this.router.navigate(['/new/transaction/pending', { addedTx: true }]);
-    this.newTx = new Transaction();
+    this.newTx = new Transaction(0,0,0);
   }
 }
