@@ -10,7 +10,7 @@ import { BlockchainService } from '../../services/blockchain.service';
 export class WalletBalanceComponent implements OnInit {
   public walletAddress = '';
   public balance = 0;
-  public transactions = [];
+  public transactions:any = [];
 
   constructor(private route: ActivatedRoute, private blockchainService: BlockchainService) {}
 

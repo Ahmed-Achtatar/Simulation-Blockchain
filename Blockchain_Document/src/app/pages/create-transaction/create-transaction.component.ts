@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 
 import { BlockchainService, IWalletKey } from '../../services/blockchain.service';
 
-const Transaction = require('src/app/blockchain_script/blockchain');
-
+import { Transaction } from "src/app/blockchain_script/blockchain";
 @Component({
   selector: 'app-create-transaction',
   templateUrl: './create-transaction.component.html',

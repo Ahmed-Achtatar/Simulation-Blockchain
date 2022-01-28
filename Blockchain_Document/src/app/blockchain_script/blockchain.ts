@@ -161,7 +161,7 @@ class Blockchain {
      * Returns the latest block on our chain. Useful when you want to create a
      * new Block and you need the hash of the previous Block.
      *
-     * @returns {Block[]}
+     * @returns {Block}
      */
     getLatestBlock(): Block {
         return this.chain[this.chain.length - 1];
