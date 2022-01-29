@@ -13,10 +13,10 @@ class Transaction {
      * @param {string} toAddress
      * @param {number} amount
      */
-    constructor(fromAddress, toAddress) {
+    constructor(fromAddress, toAddress,file) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
-        this.file =  ReadFileTransaction();
+        this.file =  file;
         this.timestamp = Date.now();
         
     }
@@ -310,22 +310,23 @@ const myWalletAddress = myKey.getPublic('hex');
 const savjeeCoin = new Blockchain();
 
 // Mine first block
-savjeeCoin.minePendingTransactions(myWalletAddress);
+
 
 // Create a transaction & sign it with your key
-const tx1 = new Transaction(myWalletAddress, 'address2');
+const tx1 = new Transaction(myWalletAddress, 'address2',ReadFileTransaction());
 tx1.signTransaction(myKey);
 savjeeCoin.addTransaction(tx1);
 
 // Mine block
-savjeeCoin.minePendingTransactions(myWalletAddress);
+
 
 // Create second transaction
-const tx2 = new Transaction(myWalletAddress, 'address1');
+const tx2 = new Transaction(myWalletAddress, 'address1',ReadFileTransaction());
 tx2.signTransaction(myKey);
 savjeeCoin.addTransaction(tx2);
 
-// Mine block
+// Mine block4
+console.log(savjeeCoin.pendingTransactions);
 savjeeCoin.minePendingTransactions(myWalletAddress);
 
 console.log();
@@ -335,5 +336,5 @@ console.log();
 // savjeeCoin.chain[1].transactions[0].amount = 10;
 
 // Check if the chain is valid
-console.log();
+console.log(savjeeCoin.chain[1].transactions);
 console.log('Blockchain valid?', savjeeCoin.isChainValid() ? 'Yes' : 'No');
