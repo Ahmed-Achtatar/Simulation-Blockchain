@@ -1,27 +1,18 @@
-
-const CryptoJS = require('crypto-js');
-const Buffer = require('buffer');
+const crypto = require('crypto');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
-import * as fs from 'fs';
+const fs = require('fs');
 
-function ReadFileTransaction(file : string) {
-  var r  = fs.readFileSync(file);
-  return Buffer.from(r);
+function ReadFileTransaction() {
+    return Buffer.from(fs.readFileSync('omar.txt'));
 }
 class Transaction {
-	public fromAddress: any;
-	public toAddress: any;
-	public file: any;
-	public timestamp: any;
-	public signature: any;
-
     /**
      * @param {string} fromAddress
      * @param {string} toAddress
      * @param {string} file
      */
-    constructor(fromAddress: any, toAddress: any, file: any) {
+    constructor(fromAddress, toAddress, file) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.file = file;
@@ -34,8 +25,8 @@ class Transaction {
      *
      * @returns {string}
      */
-    calculateHash() : string {
-        return CryptoJS.SHA256(this.fromAddress + this.toAddress + this.file + this.timestamp).toString();
+    calculateHash() {
+        return crypto.createHash('sha256').update(this.fromAddress + this.toAddress + this.file + this.timestamp).digest('hex');
     }
 
     /**
@@ -45,7 +36,7 @@ class Transaction {
      *
      * @param {string} signingKey
      */
-    signTransaction(signingKey: any) {
+    signTransaction(signingKey) {
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
         // clé. Donc, ici, nous vérifions si le fromAddress correspond à votre publicKey
         if (signingKey.getPublic('hex') !== this.fromAddress) {
@@ -68,7 +59,7 @@ class Transaction {
      *
      * @returns {boolean}
      */
-    isValid(): boolean {
+    isValid() {
         // Si la transaction n'a pas d'adresse d'expédition, nous supposons qu'il s'agit d'une
         // récompense de minage et qu'elle est valide. Vous pouvez vérifier cela dans un
         // manière différente (champ spécial par exemple)
@@ -84,12 +75,6 @@ class Transaction {
 }
 
 class Block {
-	public previousHash: any;
-	public timestamp: any;
-	public transactions: any;
-	public nonce: any;
-	public hash: any;
-
     /**
      * @param {number} timestamp
      * @param {Transaction[]} transactions
@@ -110,7 +95,7 @@ class Block {
      * @returns {string}
      */
     calculateHash() {
-        return CryptoJS.SHA256(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
+        return crypto.createHash('sha256').update(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).digest('hex');
     }
 
     /**
@@ -146,11 +131,6 @@ class Block {
 }
 
 class Blockchain {
-	public dt: any;
-	public chain: any;
-	public difficulty: any;
-	public pendingTransactions: any;
-
     constructor() {
         this.dt = Date.now();
         this.chain = [this.createGenesisBlock()];
@@ -223,7 +203,7 @@ class Blockchain {
      * @return {Transaction[]}
      */
     getAllTransactionsForWallet(address) {
-        const txs:any = [];
+        const txs = [];
 
         for (const block of this.chain) {
             for (const tx of block.transactions) {
@@ -276,14 +256,60 @@ class Blockchain {
     }
 }
 
-const _Blockchain = Blockchain;
-export { _Blockchain as Blockchain };
-const _Block = Block;
-export { _Block as Block };
-const _Transaction = Transaction;
-export { _Transaction as Transaction };
-export { ReadFileTransaction as readf }
+module.exports.Blockchain = Blockchain;
+module.exports.Block = Block;
+module.exports.Transaction = Transaction;
 
 //---------------------//
 
 
+
+// On créé un clés privée
+const myKey = ec.keyFromPrivate('7c4c45907dec40c91bab3480c39032e90049f1a44f3e18c3e07c23e3273995cf');
+
+// On calcule le clés publique depui la clés privée
+const myWalletAddress = myKey.getPublic('hex');
+
+// Creation d'une instance de la classe Blockchain
+const bch = new Blockchain();
+
+// Creation et signature d'une transaction
+const tx1 = new Transaction(myWalletAddress, 'address2', ReadFileTransaction());
+tx1.signTransaction(myKey);
+bch.addTransaction(tx1);
+
+// Creation de la deuxieme transaction
+const tx2 = new Transaction(myWalletAddress, 'address1', ReadFileTransaction());
+tx2.signTransaction(myKey);
+bch.addTransaction(tx2);
+
+// Affichage des transactions en cours avant le minage
+console.log("------ Affichage des transactions en cours -----");
+console.log(bch.pendingTransactions);
+
+// Minage de block
+bch.minePendingTransactions(myWalletAddress);
+
+
+console.log("------ Affichage de la blockchain -----");
+console.log(bch);
+
+console.log("------ Affichage de 2eme block -----");
+console.log(bch.chain[1]);
+
+console.log("------ Affichage des transactions de la 2eme block -----");
+console.log(bch.chain[1].transactions);
+
+console.log("------ Affichage de la 2eme transaction dans la 2eme block -----");
+console.log(bch.chain[1].transactions[1]);
+
+console.log("------ Affichage de fichier de la 2eme transaction dans la 2eme block -----");
+console.log(bch.chain[1].transactions[1].file);
+
+// Test de validation
+console.log("------ Test de Validation de la blockchain -----");
+
+console.log('Blockchain valid? (cas 1)', bch.isChainValid() ? 'Yes' : 'No');
+// Test de validation (autre cas)
+bch.chain[0].transactions.push(tx1);
+console.log('Blockchain valid? (cas 2)', bch.isChainValid() ? 'Yes' : 'No');
