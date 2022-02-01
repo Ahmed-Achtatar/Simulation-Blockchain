@@ -3,11 +3,10 @@ const CryptoJS = require('crypto-js');
 const Buffer = require('buffer');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
-import * as fs from 'fs';
+
 
 function ReadFileTransaction(file : string) {
-  var r  = fs.readFileSync(file);
-  return Buffer.from(r);
+  return Buffer.from(file);
 }
 class Transaction {
 	public fromAddress: any;
@@ -275,6 +274,7 @@ class Blockchain {
         return true;
     }
 }
+
 
 const _Blockchain = Blockchain;
 export { _Blockchain as Blockchain };

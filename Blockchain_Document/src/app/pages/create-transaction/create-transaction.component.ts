@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 
 import { BlockchainService, IWalletKey } from '../../services/blockchain.service';
 
-import { Transaction } from "src/app/blockchain_script/blockchain";
-import * as bAll from "src/app/blockchain_script/blockchain";
+import { Transaction } from "../../blockchain_script/blockchain";
+import * as bAll from "../../blockchain_script/blockchain";
 
 @Component({
   selector: 'app-create-transaction',
@@ -27,7 +27,7 @@ export class CreateTransactionComponent implements OnInit {
   createTransaction() {
 
     const newTx = this.newTx;
-    newTx.file = bAll.readf(this.chemin);
+    newTx.file =this.chemin;
     // Set the FROM address and sign the transaction
     newTx.fromAddress = this.ownWalletKey.publicKey;
     newTx.signTransaction(this.ownWalletKey.keyObj);
