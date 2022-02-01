@@ -1,28 +1,43 @@
-const cr = require('crypto-browserify');
 const crypto = require('crypto');
-const EC = require('elliptic').ec;
+const CryptoJS = require('crypto-js');
+import { ec as EC } from 'elliptic';
 const ec = new EC('secp256k1');
+const fs = require('fs');
+
+
+function ReadFileTransaction() {
+  return Buffer.from(fs.readFileSync('omar.txt'));
+}
 
 class Transaction {
+	public fromAddress: any;
+	public toAddress: any;
+	public file: any;
+	public timestamp: any;
+	public signature: any;
+
+
+
     /**
      * @param {string} fromAddress
      * @param {string} toAddress
-     * @param {number} amount
+     * @param {number} file
      */
-    constructor(fromAddress, toAddress, amount) {
+    constructor(fromAddress:any, toAddress:any, file:any) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
-        this.amount = amount;
+        this.file = file;
         this.timestamp = Date.now();
     }
 
-    /**
+
+    /*
      * Creates a SHA256 hash of the transaction
      *
      * @returns {string}
      */
-    calculateHash() {
-        return crypto.createHash('sha256').update(this.fromAddress + this.toAddress + this.amount + this.timestamp).digest('hex');
+    calculateHash(): string {
+        return CryptoJS.SHA256(this.fromAddress + this.toAddress + this.file + this.timestamp).toString();
     }
 
     /**
@@ -32,7 +47,7 @@ class Transaction {
      *
      * @param {string} signingKey
      */
-    signTransaction(signingKey) {
+    signTransaction(signingKey:any) {
         // You can only send a transaction from the wallet that is linked to your
         // key. So here we check if the fromAddress matches your publicKey
         if (signingKey.getPublic('hex') !== this.fromAddress) {
@@ -54,7 +69,7 @@ class Transaction {
      *
      * @returns {boolean}
      */
-    isValid() {
+    isValid(): boolean {
         // If the transaction doesn't have a from address we assume it's a
         // mining reward and that it's valid. You could verify this in a
         // different way (special field for instance)
@@ -70,12 +85,18 @@ class Transaction {
 }
 
 class Block {
+	public previousHash: any;
+	public timestamp: any;
+	public transactions: any;
+	public nonce: any;
+	public hash: any;
+
     /**
      * @param {number} timestamp
      * @param {Transaction[]} transactions
      * @param {string} previousHash
      */
-    constructor(timestamp, transactions, previousHash = '') {
+    constructor(timestamp: number, transactions: Transaction[], previousHash: string = '') {
         this.previousHash = previousHash;
         this.timestamp = timestamp;
         this.transactions = transactions;
@@ -89,8 +110,8 @@ class Block {
      *
      * @returns {string}
      */
-    calculateHash() {
-        return crypto.createHash('sha256').update(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).digest('hex');
+    calculateHash(): string {
+        return CryptoJS.SHA256(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
     }
 
     /**
@@ -99,13 +120,12 @@ class Block {
      *
      * @param {number} difficulty
      */
-    mineBlock(difficulty) {
+    mineBlock(difficulty: number) {
         while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
             this.nonce++;
             this.hash = this.calculateHash();
         }
 
-        debug(`Block mined: ${this.hash}`);
     }
 
     /**
@@ -114,7 +134,7 @@ class Block {
      *
      * @returns {boolean}
      */
-    hasValidTransactions() {
+    hasValidTransactions(): boolean {
         for (const tx of this.transactions) {
             if (!tx.isValid()) {
                 return false;
@@ -126,6 +146,11 @@ class Block {
 }
 
 class Blockchain {
+	public chain: any;
+	public difficulty: any;
+	public pendingTransactions: any;
+	public miningReward: any;
+
     constructor() {
         this.chain = [this.createGenesisBlock()];
         this.difficulty = 2;
@@ -136,7 +161,7 @@ class Blockchain {
     /**
      * @returns {Block}
      */
-    createGenesisBlock() {
+    createGenesisBlock(): Block {
         return new Block(Date.parse('2017-01-01'), [], '0');
     }
 
@@ -144,9 +169,9 @@ class Blockchain {
      * Returns the latest block on our chain. Useful when you want to create a
      * new Block and you need the hash of the previous Block.
      *
-     * @returns {Block[]}
+     * @returns {Block}
      */
-    getLatestBlock() {
+    getLatestBlock(): Block {
         return this.chain[this.chain.length - 1];
     }
 
@@ -157,14 +182,13 @@ class Blockchain {
      *
      * @param {string} miningRewardAddress
      */
-    minePendingTransactions(miningRewardAddress) {
+    minePendingTransactions(miningRewardAddress: string) {
         const rewardTx = new Transaction(null, miningRewardAddress, this.miningReward);
         this.pendingTransactions.push(rewardTx);
 
         const block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
         block.mineBlock(this.difficulty);
 
-        debug('Block successfully mined!');
         this.chain.push(block);
 
         this.pendingTransactions = [];
@@ -177,7 +201,7 @@ class Blockchain {
      *
      * @param {Transaction} transaction
      */
-    addTransaction(transaction) {
+    addTransaction(transaction: Transaction) {
         if (!transaction.fromAddress || !transaction.toAddress) {
             throw new Error('Transaction must include from and to address');
         }
@@ -187,17 +211,17 @@ class Blockchain {
             throw new Error('Cannot add invalid transaction to chain');
         }
 
-        if (transaction.amount <= 0) {
-            throw new Error('Transaction amount should be higher than 0');
+        if (transaction.file <= 0) {
+            throw new Error('Transaction file should be higher than 0');
         }
 
-        // Making sure that the amount sent is not greater than existing balance
-        if (this.getBalanceOfAddress(transaction.fromAddress) < transaction.amount) {
+        // Making sure that the file sent is not greater than existing balance
+        if (this.getBalanceOfAddress(transaction.fromAddress) < transaction.file) {
             throw new Error('Not enough balance');
         }
 
         this.pendingTransactions.push(transaction);
-        debug('transaction added: %s', transaction);
+
     }
 
     /**
@@ -206,22 +230,20 @@ class Blockchain {
      * @param {string} address
      * @returns {number} The balance of the wallet
      */
-    getBalanceOfAddress(address) {
+    getBalanceOfAddress(address: string): number {
         let balance = 0;
 
         for (const block of this.chain) {
             for (const trans of block.transactions) {
                 if (trans.fromAddress === address) {
-                    balance -= trans.amount;
+                    balance -= trans.file;
                 }
 
                 if (trans.toAddress === address) {
-                    balance += trans.amount;
+                    balance += trans.file;
                 }
             }
         }
-
-        debug('getBalanceOfAdrees: %s', balance);
         return balance;
     }
 
@@ -232,8 +254,8 @@ class Blockchain {
      * @param  {string} address
      * @return {Transaction[]}
      */
-    getAllTransactionsForWallet(address) {
-        const txs = [];
+    getAllTransactionsForWallet(address: string): Transaction[] {
+        const txs:any = [];
 
         for (const block of this.chain) {
             for (const tx of block.transactions) {
@@ -243,7 +265,6 @@ class Blockchain {
             }
         }
 
-        debug('get transactions for wallet count: %s', txs.length);
         return txs;
     }
 
@@ -254,7 +275,7 @@ class Blockchain {
      *
      * @returns {boolean}
      */
-    isChainValid() {
+    isChainValid(): boolean {
         // Check if the Genesis block hasn't been tampered with by comparing
         // the output of createGenesisBlock with the first block on our chain
         const realGenesis = JSON.stringify(this.createGenesisBlock());
@@ -286,6 +307,9 @@ class Blockchain {
     }
 }
 
-module.exports.Blockchain = Blockchain;
-module.exports.Block = Block;
-module.exports.Transaction = Transaction;
+const _Blockchain = Blockchain;
+export { _Blockchain as Blockchain };
+const _Block = Block;
+export { _Block as Block };
+const _Transaction = Transaction;
+export { _Transaction as Transaction };

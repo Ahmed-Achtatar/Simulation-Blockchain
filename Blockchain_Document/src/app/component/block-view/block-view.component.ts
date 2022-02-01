@@ -8,10 +8,10 @@ import { BlockchainService } from '../../services/blockchain.service';
 })
 export class BlockViewComponent implements OnInit {
   @Input()
-  public block;
+  public block : any;
 
   @Input()
-  public selectedBlock;
+  public selectedBlock : any;
 
   private blocksInChain;
 

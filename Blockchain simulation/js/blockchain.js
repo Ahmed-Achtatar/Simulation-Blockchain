@@ -14,7 +14,7 @@ class Block {
         this.timestamp = Date.now();
 
     }
-    get getDate() {return Date.now();}
+    get getDate() { return Date.now(); }
 
     get getprevBlock() { return this.prevBlockHash };
 
@@ -28,17 +28,18 @@ class Block {
     getHash() {
         // retourne le hash code de tous les données en chaine de caractere
         return '01000000' // Decision de validation
-        +CryptoJS.SHA256(
-            
-            this.prevBlockHash // block precedent en hash
             +
-            this.getMerkle() // données en hash 
-            +
-            toHex(this.timestamp) // date en hexadecimal
-            +
-            '1' +
-            toHex(this.nonce) // nonce 
-        ).toString();
+            CryptoJS.SHA256(
+
+                this.prevBlockHash // block precedent en hash
+                +
+                this.getMerkle() // données en hash 
+                +
+                toHex(this.timestamp) // date en hexadecimal
+                +
+                '1' +
+                toHex(this.nonce) // nonce 
+            ).toString();
     }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Blockchain } from 'src/app/blockchain_script/blockchain';
+import { Blockchain } from "../blockchain_script/blockchain";
 import * as EC from 'elliptic';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class BlockchainService {
     );
   }
 
-  addressIsFromCurrentUser(address) {
+  addressIsFromCurrentUser(address: any) {
     return address === this.walletKeys[0].publicKey;
   }
 
@@ -42,7 +42,7 @@ export class BlockchainService {
     return this.blockchainInstance.pendingTransactions;
   }
 
-  addTransaction(tx) {
+  addTransaction(tx: any) {
     this.blockchainInstance.addTransaction(tx);
   }
 }

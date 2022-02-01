@@ -9,8 +9,7 @@ import { BlockchainService } from '../../services/blockchain.service';
 })
 export class WalletBalanceComponent implements OnInit {
   public walletAddress = '';
-  public balance = 0;
-  public transactions = [];
+  public transactions:any = [];
 
   constructor(private route: ActivatedRoute, private blockchainService: BlockchainService) {}
 
@@ -19,7 +18,6 @@ export class WalletBalanceComponent implements OnInit {
         this.walletAddress = params['address'];
 
         const blockchain = this.blockchainService.blockchainInstance;
-        this.balance = blockchain.getBalanceOfAddress(this.walletAddress);
         this.transactions = blockchain.getAllTransactionsForWallet(this.walletAddress);
     });
   }
