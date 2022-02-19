@@ -8,72 +8,56 @@ const { PDFNet } = require('@pdftron/pdfnet-node');
 
 async function main() {
     try {
+        // ---------------- Preparation --------------------
+        // Récuperer le document dont on veut signer
         const doc = await PDFNet.PDFDoc.createFromFilePath('CV.pdf');
-
+        // Récuperer la page dont on veut signer
         const page1 = await doc.getPage(1);
-
-        // Create a text field that we can lock using the field permissions feature.
-        // ElementBuilder is used to build new Element objects
+        // creer le builder qui va ajouter des blocks à la page
         const builder = await PDFNet.ElementBuilder.create();
-        // ElementWriter is used to write Elements to the page
+        // Writer est le responsable d'ajouter du texte,d'image,... à un block de builder
         const writer = await PDFNet.ElementWriter.create();
-        const pageRect = await PDFNet.Rect.init(200, 200, 612, 794);
-        let page = await doc.pageCreate(pageRect);
+        // le rectangle qui positionne le block du builder
+        // const pageRect = await PDFNet.Rect.init();
+
+        // ---------------- Ajout d'une E-Signature --------------------
+        // Creation du signature digital par un certificat et nommer son champ
+        const certification_sig_field = await doc.createDigitalSignatureField('yourCertificate.pfx');
+        // Ajouter les Permissions à la signature
         writer.beginOnPage(page1);
-        let element = await builder.createTextBeginWithFont(await PDFNet.Font.create(doc, PDFNet.Font.StandardType1Font.e_times_roman), 12);
+        let element = await builder.createTextBeginWithFont(await PDFNet.Font.create(doc, PDFNet.Font.StandardType1Font.e_times_roman), 20);
         writer.writeElement(element);
 
-        element = await builder.createNewTextRun('Hello World! qosihoihofhzaouhzoufhoauzhfouafh');
-        // element.setTextMatrixEntries(10, 0, 0, 10, 0, 600);
-        let gstate = await element.getGState();
-        // Set the spacing between lines
-        gstate.setLeading(15);
+        element = await builder.createNewTextRun('Signes par: ');
+        element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 760);
+
         writer.writeElement(element);
-        writer.writeElement(await builder.createTextNewLine());
+        element = await builder.createNewTextRun('Date de Signature: ' + certification_sig_field.getSigningTime);
+        // element.setPosAdjustment(15);
+        element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 775);
+
+        // let gstate = await element.getGState();
+        // Set the spacing between lines
+
+        // gstate.setLeading(15);
+        // gstate.setTransform(0.5, 0, 0, 0.5, 280, 0);
+        writer.writeElement(element);
+
+        // writer.writeElement(await builder.createTextNewLine());
         writer.writeElement(await builder.createTextEnd());
 
         writer.end(); // save changes to the current page
+        doc.pageRemove(await doc.getPageIterator(1));
         doc.pagePushBack(page1);
-        // const a = await doc.getPageIterator();
-        // doc.pageRemove(a);
 
-        //   builder.createTextRun("Ahmed",fnt,10);
-        //   // ElementWriter is used to write Elements to the page
-        //   const writer = await PDFNet.ElementWriter.create();
-
-        //   writer.beginOnPage(page1);
-        // writer.writeString("ahmed");
-
-        /* Create a new signature form field in the PDFDoc. The name argument is optional;
-        leaving it empty causes it to be auto-generated. However, you may need the name for later.
-        Acrobat doesn't show digsigfield in side panel if it's without a widget. Using a
-        Rect with 0 width and 0 height, or setting the NoPrint/Invisible flags makes it invisible. */
-        const certification_sig_field = await doc.createDigitalSignatureField('yourCertificate.pfx');
-        console.log(parseFloat((await page1.getPageHeight()).toString()) + (new PDFNet.ColorPt(200, 100, 50, 1)).toString + '    ' + (await page1.getPageHeight()).toString());
-        const widgetAnnot = await PDFNet.SignatureWidget.createWithDigitalSignatureField(doc, new PDFNet.Rect(parseFloat((await page1.getPageWidth()).toString()) - 200, parseFloat((await page1.getPageHeight()).toString()) - 750, parseFloat((await page1.getPageWidth()).toString()) - 30, parseFloat((await page1.getPageHeight()).toString()) - 780), certification_sig_field);
-        const redColor = await PDFNet.ColorPt.init(1, 0, 0);
-        // await widgetAnnot.setBackgroundColor(redColor, 1);
-        // widgetAnnot.setContents("aaa");
-        await page1.annotPushBack(widgetAnnot);
-
-        // (OPTIONAL) Add an appearance to the signature field.
-        // const img = await PDFNet.Image.createFromFile(doc, in_appearance_image_path);
-        // await widgetAnnot.createSignatureAppearance(img);
-
-        // Prepare the document locking permission level. It will be applied upon document certification.
         await certification_sig_field.setDocumentPermissions(PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed);
-
-        // Prepare to lock the text field that we created earlier.
+        const widgetAnnot = await PDFNet.SignatureWidget.createWithDigitalSignatureField(doc, new PDFNet.Rect(parseFloat((await page1.getPageWidth()).toString()) - 200, parseFloat((await page1.getPageHeight()).toString()) - 750, parseFloat((await page1.getPageWidth()).toString()) - 30, parseFloat((await page1.getPageHeight()).toString()) - 800), certification_sig_field);
+        await page1.annotPushBack(widgetAnnot);
         var fields_to_lock = ['asdf_test_field'];
         await certification_sig_field.setFieldPermissions(PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock);
 
         await certification_sig_field.certifyOnNextSave('yourCertificate.pfx', '19omaromar0');
-
-        // (OPTIONAL) Add more information to the signature dictionary.
-
-        // Save the PDFDoc. Once the method below is called, PDFNet will also sign the document using the information provided.
-
-
+        console.log("Signature's signer: " + await certification_sig_field.getSignatureName());
         await doc.save('mm.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
 
 
