@@ -12,7 +12,6 @@ class Block {
         this.prevBlockHash = prevBlock;
         // la date generer lors de la creation de block
         this.timestamp = Date.now();
-
     }
     get getDate() { return Date.now(); }
 
