@@ -30,6 +30,8 @@
         "js-to-ts-converter": "^0.18.1",
         "node-forge": "^0.10.0",
         "node-signpdf": "^1.4.1",
+        "qr-image": "^3.2.0",
+        "qrcode": "^1.5.0",
         "rxjs": "~7.4.0",
         "tslib": "^2.3.0",
         "webpack": "^5.68.0",
