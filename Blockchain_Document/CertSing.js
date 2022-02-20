@@ -9,11 +9,11 @@ const { X509Certificate } = require('crypto');
 const fs = require("fs");
 
 
-var pem = require('pem');
+
 const { pki } = require('node-forge');
 var qr = require('qr-image');
 const { toFileStream } = require('qrcode');
-const { last, first } = require('rxjs');
+
 
 
 
@@ -76,8 +76,17 @@ async function main() {
         // element = await builder.createImage(a);
         // element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 790);
 
-
-        const qr_svg = qr.imageSync("omar", { type: 'png' });
+        var opts = {
+  errorCorrectionLevel: 'H',
+  type: 'png',
+  quality: 0.9,
+  margin: 0,
+    color: {
+    dark:"#010599FF",
+    light:"#FFBF60FF"
+  }
+}
+        const qr_svg = qr.imageSync("omar",opts );
 
         console.log(qr_svg);
         // toFileStream(qr_svg);
