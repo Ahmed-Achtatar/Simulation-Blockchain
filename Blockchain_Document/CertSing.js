@@ -1,23 +1,6 @@
-//---------------------------------------------------------------------------------------
-// Copyright (c) 2001-2021 by PDFTron Systems Inc. All Rights Reserved.
-// Consult legal.txt regarding legal and license information.
-//---------------------------------------------------------------------------------------
-
-
 const { PDFNet } = require('@pdftron/pdfnet-node');
-const { X509Certificate } = require('crypto');
 const fs = require("fs");
-
-
-
-const { pki } = require('node-forge');
 var qr = require('qr-image');
-const { toFileStream } = require('qrcode');
-
-
-
-
-let data = "google.com";
 async function main() {
     try {
         // ---------------- Preparation --------------------
@@ -29,78 +12,42 @@ async function main() {
         const builder = await PDFNet.ElementBuilder.create();
         // Writer est le responsable d'ajouter du texte,d'image,... à un block de builder
         const writer = await PDFNet.ElementWriter.create();
-        // le rectangle qui positionne le block du builder
-        // const pageRect = await PDFNet.Rect.init();
 
         /*---------------- Ajout d'une E-Signature --------------------*/
 
         // Creation du signature digital par un certificat et nommer son champ
-        let a = await PDFNet.X509Certificate.createFromFile('certificate.crt');
-        let issuer = await (await (await a.getIssuerField()).getAllAttributesAndValues()).at(2).getAttributeTypeOID();
-        let issuer1 = (await (await a.getIssuerField()).getStringValuesForAttribute(issuer)).at(0);
-        console.log();
-        const certification_sig_field = await doc.createDigitalSignatureField('certificate.crt');
+        let cert = await PDFNet.X509Certificate.createFromFile('certificate.crt');
+        let subject = await (await (await cert.getSubjectField()).getAllAttributesAndValues()).at(0).getAttributeTypeOID();
+        let subject1 = (await (await cert.getSubjectField()).getStringValuesForAttribute(subject)).at(0);
 
-
+        const certification_sig_field = await doc.createDigitalSignatureField('Certificate');
         await certification_sig_field.setDocumentPermissions(PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed);
         const widgetAnnot = await PDFNet.SignatureWidget.createWithDigitalSignatureField(doc, new PDFNet.Rect(parseFloat((await page1.getPageWidth()).toString()) - 200, parseFloat((await page1.getPageHeight()).toString()) - 750, parseFloat((await page1.getPageWidth()).toString()) - 30, parseFloat((await page1.getPageHeight()).toString()) - 800), certification_sig_field);
         await page1.annotPushBack(widgetAnnot);
         var fields_to_lock = ['asdf_test_field'];
         await certification_sig_field.setFieldPermissions(PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock);
-
         await certification_sig_field.certifyOnNextSave('certificatea.pfx', 'ahmedahmed');
-
         // Ajouter les Permissions à la signature
         writer.beginOnPage(page1);
         let element = await builder.createTextBeginWithFont(await PDFNet.Font.create(doc, PDFNet.Font.StandardType1Font.e_times_roman), 20);
         writer.writeElement(element);
-        console.log('ss' + await certification_sig_field.getContactInfo());
-        element = await builder.createNewTextRun('Signes par: ' + (await certification_sig_field.getCert.name));
+        element = await builder.createNewTextRun('Signes par: ' + (subject1));
         element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 760);
-
         writer.writeElement(element);
 
-        // var cert = pki.createCaStore();
-
-        // console.log(cert.getIssuer);
-        // let a;
-        // qr.toDataURL('aaa', function(err, url) {
-        //     a = url;
-        // });
-        // const pfx = fs.readFileSync(__dirname + "/certificatea.pfx");
-        // let a = new pem.Pkcs12ReadResult;
-        // await pem.readPkcs12(pfx, { p12Password: "ahmedahmed" }, (err, cert) => {
-        //     a = cert;
-        // });
-        // console.log(a);
-        // element = await builder.createImage(a);
-        // element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 790);
-
         var opts = {
-  errorCorrectionLevel: 'H',
-  type: 'png',
-  quality: 0.9,
-  margin: 0,
-    color: {
-    dark:"#010599FF",
-    light:"#FFBF60FF"
-  }
-}
-        const qr_svg = qr.imageSync("omar",opts );
-
-        console.log(qr_svg);
-        // toFileStream(qr_svg);
-        // const qr_str = 'data:image/png;base64,' + qr_svg.toString('base64');
-        // element = await builder.;
-        // element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 775);
-
-        // writer.writeElement(element);
-        // writer.writeElement(await builder.createTextNewLine());
-
-
+            errorCorrectionLevel: 'H',
+            type: 'png',
+            quality: 0.9,
+            margin: 0,
+            color: {
+                dark: "#010599FF",
+                light: "#FFBF60FF"
+            }
+        }
+        const qr_svg = qr.imageSync("omar", opts);
 
         const signatureDate = await certification_sig_field.getSigningTime();
-        console.log('ss' + await certification_sig_field.getSignatureName());
         element = await builder.createNewTextRun('Date: ' + signatureDate.year + '/' + signatureDate.month + '/' + signatureDate.day + ' at ' + signatureDate.hour + ':' + signatureDate.minute + ':' + signatureDate.second);
         // element.setPosAdjustment(15);
         element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 775);
@@ -128,7 +75,6 @@ async function main() {
 
 
 
-        // console.log(await);
 
         process.exit(1);
 
