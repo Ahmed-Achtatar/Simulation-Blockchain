@@ -55,7 +55,6 @@ async function main() {
         builder.createImage
         writer.writeElement(element);
 
-
         fs.writeFileSync('./my-qr-code.png', qr_svg);
         const img = await PDFNet.Image.createFromFile(doc, './my-qr-code.png');
 
@@ -72,9 +71,21 @@ async function main() {
         await doc.save('mm.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
         const doc2 = await PDFNet.PDFDoc.createFromFilePath('mm.pdf');
         const page = await doc.getPage(1);
+   
+        
 
+            /////////////////////////////////////////
+        const doc1= await PDFNet.PDFDoc.createFromFilePath('jj.pdf');
+        doc1.initSecurityHandler();
+       console.log('==========');
+  const optss = await PDFNet.VerificationOptions.create(PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving);
 
+  // Add trust root to store of trusted certificates contained in VerificationOptions.
+  await optss.addTrustedCertificateUString('certificatea.pfx');
 
+  const result = await doc1.verifySignedDigitalSignatures(optss);
+  console.log(result);
+////////////////////////////////////////////////////////////////
 
         process.exit(1);
 
@@ -85,3 +96,9 @@ async function main() {
 }
 
 PDFNet.runWithCleanup(main, 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+
+
+
+
+
+

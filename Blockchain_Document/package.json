@@ -19,6 +19,7 @@
         "@angular/platform-browser-dynamic": "~13.1.0",
         "@angular/router": "~13.1.0",
         "@chilkat/ck-node16-win64": "^9.50.89",
+        "@ninja-labs/verify-pdf": "^0.3.9",
         "@pdftron/pdfnet-node": "^9.2.0",
         "buffer": "^6.0.3",
         "ci": "^2.1.1",
