@@ -26,7 +26,7 @@ async function main() {
         await page1.annotPushBack(widgetAnnot);
         var fields_to_lock = ['asdf_test_field'];
         await certification_sig_field.setFieldPermissions(PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock);
-        await certification_sig_field.certifyOnNextSave('certificatea.pfx', 'ahmedahmed');
+        await certification_sig_field.certifyOnNextSave('yourCertificate.pfx', '19omaromar0');
         // Ajouter les Permissions à la signature
         writer.beginOnPage(page1);
         let element = await builder.createTextBeginWithFont(await PDFNet.Font.create(doc, PDFNet.Font.StandardType1Font.e_times_roman), 20);
@@ -77,7 +77,7 @@ async function main() {
 
         /////////////////////////////////////////
         let in_docpath = 'mm.pdf';
-        in_public_key_file_path = 'certificatea.pfx';
+        in_public_key_file_path = 'yourCertificate.pfx';
         const doc1 = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
         doc1.initSecurityHandler();
         console.log('==========');
