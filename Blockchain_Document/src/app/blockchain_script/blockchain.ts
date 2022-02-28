@@ -94,7 +94,7 @@ class Block {
      * @param {Transaction[]} transactions
      * @param {string} previousHash
      */
-    constructor(timestamp, transactions, previousHash) {
+    constructor(timestamp: number, transactions: Transaction[], previousHash: string) {
         this.previousHash = previousHash;
         this.timestamp = timestamp;
         this.transactions = transactions;
@@ -108,7 +108,7 @@ class Block {
      *
      * @returns {string}
      */
-    calculateHash() {
+    calculateHash(): string {
         return CryptoJS.SHA256(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
     }
 
@@ -118,7 +118,7 @@ class Block {
      *
      * @param {number} difficulty
      */
-    mineBlock(difficulty) {
+    mineBlock(difficulty: number) {
         while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
             this.nonce++;
             this.hash = this.calculateHash();
@@ -133,7 +133,7 @@ class Block {
      *
      * @returns {boolean}
      */
-    hasValidTransactions() {
+    hasValidTransactions(): boolean {
         for (const tx of this.transactions) {
             if (!tx.isValid()) {
                 return false;
@@ -160,7 +160,7 @@ class Blockchain {
     /**
      * @returns {Block}
      */
-    createGenesisBlock() {
+    createGenesisBlock(): Block {
         return new Block(this.dt, [], '');
     }
 
@@ -170,7 +170,7 @@ class Blockchain {
      *
      * @returns {Block[]}
      */
-    getLatestBlock() {
+    getLatestBlock(): Block {
         return this.chain[this.chain.length - 1];
     }
 
@@ -180,7 +180,7 @@ class Blockchain {
      *
      * @param {string} miningAddress
      */
-    minePendingTransactions(miningAddress) {
+    minePendingTransactions(miningAddress: string) {
 
         const block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
         block.mineBlock(this.difficulty);
@@ -198,7 +198,7 @@ class Blockchain {
      *
      * @param {Transaction} transaction
      */
-    addTransaction(transaction) {
+    addTransaction(transaction: Transaction) {
         if (!transaction.fromAddress || !transaction.toAddress) {
             throw new Error('La transaction doit inclure l\'adresse d\'origine et de destination');
         }
@@ -221,7 +221,7 @@ class Blockchain {
      * @param  {string} address
      * @return {Transaction[]}
      */
-    getAllTransactionsForWallet(address) {
+    getAllTransactionsForWallet(address: string): Transaction[] {
         const txs:any = [];
 
         for (const block of this.chain) {
@@ -243,7 +243,7 @@ class Blockchain {
      *
      * @returns {boolean}
      */
-    isChainValid() {
+    isChainValid(): boolean {
         // Vérifiez si le bloc Genesis n'a pas été falsifié en comparant
         // la sortie de createGenesisBlock avec le premier bloc de notre chaîne
         const realGenesis = JSON.stringify(this.createGenesisBlock());

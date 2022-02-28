@@ -1,0 +1,155 @@
+const CryptoJS = require('crypto-js');
+import { PDFNet } from '@pdftron/pdfnet-node';
+import * as fs from "fs";
+import { exit } from 'process';
+var qr = require('qr-image');
+
+class DocumentSV {
+  public statu: number;
+    // ---------------- Preparation --------------------
+    // Récuperer le document dont on veut signer
+    constructor() {
+        this.statu = 0;
+    }
+    async Sign(docpath : string, pfxpath : string) {
+      try {
+      await PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+      const doc = await PDFNet.PDFDoc.createFromFilePath(docpath);
+     const page1 = await doc.getPage(1);
+
+      const builder = await PDFNet.ElementBuilder.create();
+
+            // Writer est le responsable d'ajouter du texte,d'image,... à un block de builder
+            const writer = await PDFNet.ElementWriter.create();
+
+
+            /*---------------- Ajout d'une E-Signature --------------------*/
+
+            const certification_sig_field =  await doc.createDigitalSignatureField('Certificate');
+
+            await certification_sig_field.setDocumentPermissions(PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed);
+            const widgetAnnot = await PDFNet.SignatureWidget.createWithDigitalSignatureField(doc, new PDFNet.Rect(parseFloat((await page1.getPageWidth()).toString()) - 200, parseFloat((await page1.getPageHeight()).toString()) - 750, parseFloat((await page1.getPageWidth()).toString()) - 30, parseFloat((await page1.getPageHeight()).toString()) - 800), certification_sig_field);
+
+            await page1.annotPushBack(widgetAnnot);
+            const fields_to_lock = ['asdf_test_field'];
+
+
+            await certification_sig_field.setFieldPermissions(PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock);
+
+            await certification_sig_field.certifyOnNextSave(pfxpath, 'ahmedahmed');
+
+            // Ajouter les Permissions à la signature
+            await writer.beginOnPage(page1);
+
+             let element = await builder.createTextBeginWithFont(await PDFNet.Font.create(doc, PDFNet.Font.StandardType1Font.e_times_roman), 20);
+            await writer.writeElement(element);
+            element = await builder.createNewTextRun('');
+            await element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat(((await page1).getPageWidth()).toString()) - 190, parseFloat(((await page1).getPageHeight()).toString()) - 760);
+            await writer.writeElement(element);
+
+            const options = {
+                errorCorrectionLevel: 'H',
+                type: 'png',
+                quality: 0.9,
+                margin: 0,
+                color: {
+                    dark: "#010599FF",
+                    light: "#FFBF60FF"
+                }
+            }
+            const qr_svg = await qr.imageSync("omar", options);
+            const signatureDate = await certification_sig_field.getSigningTime();
+            element = await builder.createNewTextRun(`Date: ${(signatureDate).year}/${(signatureDate).month}/${(signatureDate).day} at ${(signatureDate).hour}:${( signatureDate).minute}:${(signatureDate).second}`);
+
+            // element.setPosAdjustment(15);
+            await element.setTextMatrixEntries(0.5, 0, 0, 0.5,  parseFloat((await page1.getPageWidth()).toString()) - 190, parseFloat((await page1.getPageHeight()).toString()) - 775);
+
+
+            await writer.writeElement(element);
+
+            fs.writeFileSync('my-qr-code.png', qr_svg);
+            const img = await PDFNet.Image.createFromFile(doc, 'my-qr-code.png');
+            element = await builder.createImageScaled( img, 300, 600, 200, -150);
+            await writer.writeElement(element);
+            await writer.writeElement(await builder.createTextEnd());
+
+            await writer.end(); // save changes to the current page
+            await doc.pageRemove(await doc.getPageIterator(1));
+            await doc.pagePushBack( page1);
+
+
+            await doc.save('src/app/aaa/mm.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
+            exit(1);
+
+          } catch (err) {
+            console.log('error', err)
+        }
+          }
+        // Récuperer la page dont on veut signer
+
+    // creer le builder qui va ajouter des blocks à la page
+
+
+    ///////////////////////////////
+
+    ///////////////////////////////////////
+    public async verify(in_docpath : string) {
+      try {
+        await PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+
+        // let in_public_key_file_path = pfxpath;
+        let doc1 = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
+        await doc1.initSecurityHandler();
+        const opts = await PDFNet.VerificationOptions.create(PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving);
+        // await opts.addTrustedCertificateUString(in_public_key_file_path, PDFNet.VerificationOptions.CertificateTrustFlag.e_default_trust + PDFNet.VerificationOptions.CertificateTrustFlag.e_certification_trust);
+
+        const digsig_fitr = await doc1.getDigitalSignatureFieldIteratorBegin();
+
+        var verification_status = true;
+        if( !(await doc1.hasSignatures())){
+          this.statu = 1;
+        }
+        else{
+
+        for (; await digsig_fitr.hasNext(); await digsig_fitr.next()) {
+
+            let curr = await digsig_fitr.current();
+            let result = await curr.verify( opts);
+//  modified is not in the blockchain, wrong digest
+           if ((!((await result.getDigestStatus()) == 1)) && (!((await result.getDigestStatus()) == 3))){
+            this.statu  = 2;
+           }
+           else if((await result.getPermissionsStatus()) != 2){
+            this.statu = 3;
+            }
+
+
+        }
+      }
+
+      return this.statu;
+
+      } catch (err) {
+
+        return this.statu;
+    }
+  }
+  public async getHash(in_docpath){
+
+return CryptoJS.SHA256().toString();
+  }
+
+
+    ////////////////////////////////////////////////////////////////
+
+}
+
+let a = new DocumentSV();
+
+async function launchVerification(){
+  console.log(await a.verify('CV.pdf'));
+  exit(1);
+}
+launchVerification();
+
+

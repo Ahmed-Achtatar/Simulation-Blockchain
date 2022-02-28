@@ -40,15 +40,13 @@ var pdfnet_node_1 = require("@pdftron/pdfnet-node");
 var fs = require("fs");
 var process_1 = require("process");
 var qr = require('qr-image');
-var DocumentSign = /** @class */ (function () {
+var DocumentSV = /** @class */ (function () {
     // ---------------- Preparation --------------------
     // Récuperer le document dont on veut signer
-    function DocumentSign(docpath, certificate) {
-        this.docpath = docpath;
-        this.certificate = certificate;
-        this.timestamp = Date.now();
+    function DocumentSV() {
+        this.statu = 0;
     }
-    DocumentSign.prototype.Sign = function () {
+    DocumentSV.prototype.Sign = function (docpath, pfxpath) {
         return __awaiter(this, void 0, void 0, function () {
             var doc, page1, builder, writer, certification_sig_field, widgetAnnot, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, fields_to_lock, element, _l, _m, _o, _p, _q, _r, _s, options, qr_svg, signatureDate, _t, _u, _v, _w, _x, img, _y, _z, _0, _1, err_1;
             return __generator(this, function (_2) {
@@ -58,7 +56,7 @@ var DocumentSign = /** @class */ (function () {
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
                     case 1:
                         _2.sent();
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(this.docpath)];
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(docpath)];
                     case 2:
                         doc = _2.sent();
                         return [4 /*yield*/, doc.getPage(1)];
@@ -67,15 +65,12 @@ var DocumentSign = /** @class */ (function () {
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.ElementBuilder.create()];
                     case 4:
                         builder = _2.sent();
-                        console.log('builder' + builder);
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.ElementWriter.create()];
                     case 5:
                         writer = _2.sent();
-                        console.log('writer' + writer);
                         return [4 /*yield*/, doc.createDigitalSignatureField('Certificate')];
                     case 6:
                         certification_sig_field = _2.sent();
-                        console.log('field' + certification_sig_field);
                         return [4 /*yield*/, certification_sig_field.setDocumentPermissions(pdfnet_node_1.PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed)];
                     case 7:
                         _2.sent();
@@ -99,16 +94,14 @@ var DocumentSign = /** @class */ (function () {
                     case 11: return [4 /*yield*/, _b.apply(_a, _c.concat([new (_e.apply(_d, _g.concat([_k.apply(void 0, [(_2.sent()).toString()]) - 800])))(), certification_sig_field]))];
                     case 12:
                         widgetAnnot = _2.sent();
-                        console.log('widg' + widgetAnnot);
                         return [4 /*yield*/, page1.annotPushBack(widgetAnnot)];
                     case 13:
                         _2.sent();
                         fields_to_lock = ['asdf_test_field'];
-                        console.log('fdlock' + fields_to_lock);
                         return [4 /*yield*/, certification_sig_field.setFieldPermissions(pdfnet_node_1.PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock)];
                     case 14:
                         _2.sent();
-                        return [4 /*yield*/, certification_sig_field.certifyOnNextSave(this.certificate, 'ahmedahmed')];
+                        return [4 /*yield*/, certification_sig_field.certifyOnNextSave(pfxpath, 'ahmedahmed')];
                     case 15:
                         _2.sent();
                         // Ajouter les Permissions à la signature
@@ -116,8 +109,6 @@ var DocumentSign = /** @class */ (function () {
                     case 16:
                         // Ajouter les Permissions à la signature
                         _2.sent();
-                        console.log('doc' + doc);
-                        console.log('page' + page1);
                         _m = (_l = builder).createTextBeginWithFont;
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.Font.create(doc, pdfnet_node_1.PDFNet.Font.StandardType1Font.e_times_roman)];
                     case 17: return [4 /*yield*/, _m.apply(_l, [_2.sent(), 20])];
@@ -179,7 +170,6 @@ var DocumentSign = /** @class */ (function () {
                         return [4 /*yield*/, writer.writeElement(element)];
                     case 31:
                         _2.sent();
-                        console.log(this.certificate);
                         fs.writeFileSync('my-qr-code.png', qr_svg);
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.Image.createFromFile(doc, 'my-qr-code.png')];
                     case 32:
@@ -195,7 +185,6 @@ var DocumentSign = /** @class */ (function () {
                     case 35: return [4 /*yield*/, _z.apply(_y, [_2.sent()])];
                     case 36:
                         _2.sent();
-                        console.log(this.certificate);
                         return [4 /*yield*/, writer.end()];
                     case 37:
                         _2.sent(); // save changes to the current page
@@ -226,151 +215,91 @@ var DocumentSign = /** @class */ (function () {
     // creer le builder qui va ajouter des blocks à la page
     ///////////////////////////////
     ///////////////////////////////////////
-    DocumentSign.prototype.verify = function () {
+    DocumentSV.prototype.verify = function (in_docpath) {
         return __awaiter(this, void 0, void 0, function () {
-            var isValid, in_docpath, in_public_key_file_path, doc1, opts, digsig_fitr, verification_status, curr, result, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, changes, i, change, err_2;
-            return __generator(this, function (_m) {
-                switch (_m.label) {
+            var doc1, opts, digsig_fitr, verification_status, curr, result, _a, err_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _m.trys.push([0, 28, , 29]);
-                        isValid = void 0;
+                        _b.trys.push([0, 19, , 20]);
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
                     case 1:
-                        _m.sent();
-                        in_docpath = 'CV.pdf';
-                        in_public_key_file_path = this.certificate;
+                        _b.sent();
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(in_docpath)];
                     case 2:
-                        doc1 = _m.sent();
-                        doc1.initSecurityHandler();
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.VerificationOptions.create(pdfnet_node_1.PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving)];
+                        doc1 = _b.sent();
+                        return [4 /*yield*/, doc1.initSecurityHandler()];
                     case 3:
-                        opts = _m.sent();
-                        return [4 /*yield*/, opts.addTrustedCertificateUString(in_public_key_file_path, pdfnet_node_1.PDFNet.VerificationOptions.CertificateTrustFlag.e_default_trust + pdfnet_node_1.PDFNet.VerificationOptions.CertificateTrustFlag.e_certification_trust)];
+                        _b.sent();
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.VerificationOptions.create(pdfnet_node_1.PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving)];
                     case 4:
-                        _m.sent();
-                        digsig_fitr = doc1.getDigitalSignatureFieldIteratorBegin();
-                        console.log(digsig_fitr);
+                        opts = _b.sent();
+                        return [4 /*yield*/, doc1.getDigitalSignatureFieldIteratorBegin()];
+                    case 5:
+                        digsig_fitr = _b.sent();
                         verification_status = true;
-                        _m.label = 5;
-                    case 5: return [4 /*yield*/, digsig_fitr];
-                    case 6: return [4 /*yield*/, (_m.sent()).hasNext()];
-                    case 7:
-                        if (!_m.sent()) return [3 /*break*/, 27];
-                        return [4 /*yield*/, digsig_fitr];
-                    case 8: return [4 /*yield*/, (_m.sent()).current()];
+                        return [4 /*yield*/, doc1.hasSignatures()];
+                    case 6:
+                        if (!!(_b.sent())) return [3 /*break*/, 7];
+                        this.statu = 1;
+                        return [3 /*break*/, 18];
+                    case 7: return [4 /*yield*/, digsig_fitr.hasNext()];
+                    case 8:
+                        if (!_b.sent()) return [3 /*break*/, 18];
+                        return [4 /*yield*/, digsig_fitr.current()];
                     case 9:
-                        curr = _m.sent();
+                        curr = _b.sent();
                         return [4 /*yield*/, curr.verify(opts)];
                     case 10:
-                        result = _m.sent();
-                        return [4 /*yield*/, result.getVerificationStatus()];
+                        result = _b.sent();
+                        return [4 /*yield*/, result.getDigestStatus()];
                     case 11:
-                        if (!_m.sent()) return [3 /*break*/, 14];
-                        _b = (_a = console).log;
-                        _c = 'Signature verified, objnum: ';
-                        return [4 /*yield*/, curr.getSDFObj()];
-                    case 12: return [4 /*yield*/, (_m.sent()).getObjNum()];
+                        _a = (!((_b.sent()) == 1));
+                        if (!_a) return [3 /*break*/, 13];
+                        return [4 /*yield*/, result.getDigestStatus()];
+                    case 12:
+                        _a = (!((_b.sent()) == 3));
+                        _b.label = 13;
                     case 13:
-                        _b.apply(_a, [_c + (_m.sent())]);
-                        return [3 /*break*/, 17];
-                    case 14:
-                        _e = (_d = console).log;
-                        _f = 'Signature verification failed, objnum: ';
-                        return [4 /*yield*/, curr.getSDFObj()];
-                    case 15: return [4 /*yield*/, (_m.sent()).getObjNum()];
-                    case 16:
-                        _e.apply(_d, [_f + (_m.sent())]);
-                        verification_status = false;
-                        _m.label = 17;
-                    case 17: return [4 /*yield*/, result.hasTrustVerificationResult()];
-                    case 18:
-                        if (!_m.sent()) return [3 /*break*/, 22];
-                        _h = (_g = console).log;
-                        _j = 'Detailed verification result: \n\t';
-                        return [4 /*yield*/, result.getDocumentStatusAsString()];
-                    case 19:
-                        _k = _j +
-                            (_m.sent()) + '\n\t';
-                        return [4 /*yield*/, result.getDigestStatusAsString()];
-                    case 20:
-                        _l = _k +
-                            (_m.sent()) + '\n\t';
-                        return [4 /*yield*/, result.getPermissionsStatusAsString()];
-                    case 21:
-                        _h.apply(_g, [_l +
-                                (_m.sent())]);
-                        _m.label = 22;
-                    case 22: return [4 /*yield*/, result.getDisallowedChanges()];
-                    case 23:
-                        changes = _m.sent();
-                        for (i = 0; i < changes.length; ++i) {
-                            change = changes[i];
-                            console.log('\tDisallowed change: ' + change.getTypeAsString() + ', objnum: ' + change.getObjNum());
+                        if (!_a) return [3 /*break*/, 14];
+                        this.statu = 2;
+                        return [3 /*break*/, 16];
+                    case 14: return [4 /*yield*/, result.getPermissionsStatus()];
+                    case 15:
+                        if ((_b.sent()) != 2) {
+                            this.statu = 3;
                         }
-                        // Get and print all the detailed trust-related results, if they are available.
-                        // if (await result.hasTrustVerificationResult()) {
-                        //     let trust_verification_result = await  result.getTrustVerificationResult();
-                        //     console.log(await trust_verification_result.wasSuccessful() ? 'Trust verified.' : 'Trust not verifiable.');
-                        //     console.log(await trust_verification_result.getResultString());
-                        //     let tmp_time_t = await trust_verification_result.getTimeOfTrustVerification();
-                        //     switch (await trust_verification_result.getTimeOfTrustVerificationEnum()) {
-                        //         case PDFNet.VerificationOptions.TimeMode.e_current:
-                        //             console.log('Trust verification attempted with respect to current time (as epoch time):' + tmp_time_t);
-                        //             break;
-                        //         case PDFNet.VerificationOptions.TimeMode.e_signing:
-                        //             console.log('Trust verification attempted with respect to signing time (as epoch time): ' + tmp_time_t);
-                        //             break;
-                        //         case PDFNet.VerificationOptions.TimeMode.e_timestamp:
-                        //             console.log('Trust verification attempted with respect to secure embedded timestamp (as epoch time): ' + tmp_time_t);
-                        //             break;
-                        //     }
-                        // let cert_path = await trust_verification_result.getCertPath();
-                        // if (cert_path.length == 0) {
-                        //     console.log('Could not print certificate path.');
-                        // } else {
-                        //     console.log('Certificate path:');
-                        //     for (var i = 0; i < cert_path.length; i++) {
-                        //         console.log('\tCertificate:');
-                        //         let full_cert = cert_path[i];
-                        //         console.log('\t\tIssuer names:');
-                        //         let issuer_dn = await (await full_cert.getIssuerField()).getAllAttributesAndValues();
-                        //         for (var j = 0; j < issuer_dn.length; j++) {
-                        //             console.log('\t\t\t' + issuer_dn[j].getStringValue());
-                        //         }
-                        //         console.log('\t\tSubject names:');
-                        //         let subject_dn = await (await full_cert.getSubjectField()).getAllAttributesAndValues();
-                        //         for (var j = 0; j < subject_dn.length; j++) {
-                        //             console.log('\t\t\t' + await subject_dn[j].getStringValue());
-                        //         }
-                        //         console.log('\t\tExtensions:');
-                        //         let extension_dn = await full_cert.getExtensions();
-                        //         for (var j = 0; j < extension_dn.length; j++) {
-                        //             console.log('\t\t\t' + await extension_dn[j].toString());
-                        //         }
-                        //     }
-                        // }
-                        console.log(result);
-                        _m.label = 24;
-                    case 24: return [4 /*yield*/, digsig_fitr];
-                    case 25: return [4 /*yield*/, (_m.sent()).next()];
-                    case 26:
-                        _m.sent();
-                        return [3 /*break*/, 5];
-                    case 27:
-                        (0, process_1.exit)(1);
-                        return [3 /*break*/, 29];
-                    case 28:
-                        err_2 = _m.sent();
-                        console.log('error', err_2);
-                        return [3 /*break*/, 29];
-                    case 29: return [2 /*return*/];
+                        _b.label = 16;
+                    case 16: return [4 /*yield*/, digsig_fitr.next()];
+                    case 17:
+                        _b.sent();
+                        return [3 /*break*/, 7];
+                    case 18: return [2 /*return*/, this.statu];
+                    case 19:
+                        err_2 = _b.sent();
+                        return [2 /*return*/, this.statu];
+                    case 20: return [2 /*return*/];
                 }
             });
         });
     };
-    return DocumentSign;
+    return DocumentSV;
 }());
-var a = new DocumentSign('./CV.pdf', './certificatea.pfx');
-a.Sign();
-a.verify();
+var a = new DocumentSV();
+function launchVerification() {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = (_a = console).log;
+                    return [4 /*yield*/, a.verify('CV.pdf')];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    (0, process_1.exit)(1);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+launchVerification();
