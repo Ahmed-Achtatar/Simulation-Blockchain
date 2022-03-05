@@ -43,8 +43,8 @@ export class BlockchainService {
     return this.blockchainInstance.pendingTransactions;
   }
 
-  addTransaction(tx: Transaction) {
-    this.blockchainInstance.addTransaction(tx : BC.Transaction);
+  addTransaction(tx: any) {
+    this.blockchainInstance.addTransaction(tx);
   }
 }
 

@@ -8,7 +8,7 @@ import { BlockchainService } from '../../services/blockchain.service';
 })
 export class TransactionsTableComponent implements OnInit {
   @Input()
-  public transactions : Transaction[] = [];
+  public transactions : any[] = [];
 
   constructor(public blockchainService: BlockchainService) { }
 
