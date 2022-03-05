@@ -21,6 +21,7 @@
         "@chilkat/ck-node16-win64": "^9.50.89",
         "@ninja-labs/verify-pdf": "^0.3.9",
         "@pdftron/pdfnet-node": "^9.2.0",
+        "browserify-zlib": "^0.2.0",
         "buffer": "^6.0.3",
         "ci": "^2.1.1",
         "crypto": "^1.0.1",
@@ -35,6 +36,7 @@
         "qr-image": "^3.2.0",
         "qrcode": "^1.5.0",
         "rxjs": "~7.4.0",
+        "stream-browserify": "^3.0.0",
         "tslib": "^2.3.0",
         "webpack": "^5.68.0",
         "zone.js": "~0.11.4"
@@ -47,6 +49,7 @@
         "@types/elliptic": "^6.4.14",
         "@types/jasmine": "~3.10.0",
         "@types/node": "^12.20.42",
+        "@types/qr-image": "^3.2.5",
         "jasmine-core": "~3.10.0",
         "karma": "~6.3.0",
         "karma-chrome-launcher": "~3.1.0",
@@ -54,5 +57,8 @@
         "karma-jasmine": "~4.0.0",
         "karma-jasmine-html-reporter": "~1.7.0",
         "typescript": "~4.5.2"
+    },
+    "browser": {
+        "zlib": false
     }
 }

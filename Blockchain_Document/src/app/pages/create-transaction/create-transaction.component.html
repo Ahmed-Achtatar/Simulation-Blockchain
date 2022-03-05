@@ -13,14 +13,6 @@
     </div>
 
     <div class="form-group">
-        <label for="toAddress">To address</label>
-        <input type="text" class="form-control" id="toAddress" aria-describedby="toAddressHelp" [(ngModel)]="newTx.toAddress">
-        <small id="toAddressHelp" class="form-text text-muted">
-	    	The address of the wallet where you want to send the money to. You can type random text here (if you are not interested in recovering the funds)
-	    </small>
-    </div>
-
-    <div class="form-group">
         <!-- <input type="file" class="form-control" id="file" aria-describedby="fileHelp" [(ngModel)]="newTx.file"> -->
         <input type="file" id="file" name="file" [(ngModel)]="chemin">
     </div>

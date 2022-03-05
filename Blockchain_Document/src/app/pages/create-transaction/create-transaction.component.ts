@@ -24,6 +24,7 @@ export class CreateTransactionComponent implements OnInit {
   ngOnInit() {
   }
 
+
   createTransaction() {
 
     const newTx = this.newTx;

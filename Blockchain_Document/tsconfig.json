@@ -2,6 +2,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "stream": [ "./node_modules/stream-browserify" ],
+      "zlib": ["./node_modules/browserify-zlib"],
+      "process": ["./node_modules/process"]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

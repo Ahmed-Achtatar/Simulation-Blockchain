@@ -1,8 +1,8 @@
 const CryptoJS = require('crypto-js');
 import { PDFNet } from '@pdftron/pdfnet-node';
-import * as fs from "fs";
+
 import { exit } from 'process';
-var qr = require('qr-image');
+import * as qr from 'qr-image';
 
 class DocumentSV {
   public statu: number;
@@ -15,9 +15,11 @@ class DocumentSV {
       try {
       await PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
       const doc = await PDFNet.PDFDoc.createFromFilePath(docpath);
+
      const page1 = await doc.getPage(1);
 
       const builder = await PDFNet.ElementBuilder.create();
+
 
             // Writer est le responsable d'ajouter du texte,d'image,... à un block de builder
             const writer = await PDFNet.ElementWriter.create();
@@ -47,17 +49,17 @@ class DocumentSV {
             await element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat(((await page1).getPageWidth()).toString()) - 190, parseFloat(((await page1).getPageHeight()).toString()) - 760);
             await writer.writeElement(element);
 
-            const options = {
-                errorCorrectionLevel: 'H',
-                type: 'png',
-                quality: 0.9,
-                margin: 0,
-                color: {
-                    dark: "#010599FF",
-                    light: "#FFBF60FF"
-                }
-            }
-            const qr_svg = await qr.imageSync("omar", options);
+            // const optionss = {
+            //     errorCorrectionLevel: 'H',
+            //     type: 'png',
+            //     quality: 0.9,
+            //     margin: 0,
+            //     color: {
+            //         dark: "#010599FF",
+            //         light: "#FFBF60FF"
+            //     }
+            // }
+            const qr_svg = await qr.imageSync("omar");
             const signatureDate = await certification_sig_field.getSigningTime();
             element = await builder.createNewTextRun(`Date: ${(signatureDate).year}/${(signatureDate).month}/${(signatureDate).day} at ${(signatureDate).hour}:${( signatureDate).minute}:${(signatureDate).second}`);
 
@@ -67,8 +69,8 @@ class DocumentSV {
 
             await writer.writeElement(element);
 
-            fs.writeFileSync('my-qr-code.png', qr_svg);
-            const img = await PDFNet.Image.createFromFile(doc, 'my-qr-code.png');
+
+            const img = await PDFNet.Image.createFromMemory(doc,qr_svg,100,100,1,new PDFNet.ColorSpace());
             element = await builder.createImageScaled( img, 300, 600, 200, -150);
             await writer.writeElement(element);
             await writer.writeElement(await builder.createTextEnd());
@@ -78,7 +80,7 @@ class DocumentSV {
             await doc.pagePushBack( page1);
 
 
-            await doc.save('src/app/aaa/mm.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
+            await doc.save('src/app/Document/Signed.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
             exit(1);
 
           } catch (err) {
@@ -134,9 +136,10 @@ class DocumentSV {
         return this.statu;
     }
   }
-  public async getHash(in_docpath){
-
-return CryptoJS.SHA256().toString();
+  public async getHash(in_docpath: string){
+    const doc = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
+    let a = Buffer.from(await doc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_hex_strings));
+    return CryptoJS.SHA256(a).toString();
   }
 
 
@@ -144,12 +147,5 @@ return CryptoJS.SHA256().toString();
 
 }
 
-let a = new DocumentSV();
-
-async function launchVerification(){
-  console.log(await a.verify('CV.pdf'));
-  exit(1);
-}
-launchVerification();
-
-
+const _DocumentSV = DocumentSV;
+export { _DocumentSV as DocumentSV };

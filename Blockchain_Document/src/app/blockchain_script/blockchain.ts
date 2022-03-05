@@ -1,16 +1,17 @@
 
-const CryptoJS = require('crypto-js');
-const Buffer = require('buffer');
+import { PDFNet } from '@pdftron/pdfnet-node';
+import * as CryptoJS from 'crypto-js';
+import { DocumentSV } from 'src/app/Document/DocumentSV';
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
 
-function ReadFileTransaction(file : string) {
-  return Buffer.from(file);
-}
+// function ReadFileTransaction(filepath : string) {
+//   return Buffer.from(fs.readFileSync(filepath));
+
+// }
 class Transaction {
-	public fromAddress;
-	public toAddress: any;
+	public fromAddress : any;
 	public file: any;
 	public timestamp: any;
 	public signature: any;
@@ -22,8 +23,11 @@ class Transaction {
      */
     constructor(fromAddress: any, toAddress: any, file: any) {
         this.fromAddress = fromAddress;
-        this.toAddress = toAddress;
+
         this.file = file;
+        let docsv = new DocumentSV();
+        docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
+
         this.timestamp = Date.now();
 
     }
@@ -34,7 +38,9 @@ class Transaction {
      * @returns {string}
      */
     calculateHash() : string {
-        return CryptoJS.SHA256(this.fromAddress + this.toAddress + this.file + this.timestamp).toString();
+      let docsv = new DocumentSV();
+
+        return CryptoJS.SHA256(this.fromAddress + docsv.getHash(this.file) + this.timestamp).toString();
     }
 
     /**
@@ -85,7 +91,7 @@ class Transaction {
 class Block {
 	public previousHash: any;
 	public timestamp: any;
-	public transactions: any;
+	public transactions: Transaction[];
 	public nonce: any;
 	public hash: any;
 
@@ -199,8 +205,8 @@ class Blockchain {
      * @param {Transaction} transaction
      */
     addTransaction(transaction: Transaction) {
-        if (!transaction.fromAddress || !transaction.toAddress) {
-            throw new Error('La transaction doit inclure l\'adresse d\'origine et de destination');
+        if (!transaction.fromAddress) {
+            throw new Error('La transaction doit inclure l\'adresse d\'origine ');
         }
 
         // Verifier la transactiion
@@ -282,7 +288,7 @@ const _Block = Block;
 export { _Block as Block };
 const _Transaction = Transaction;
 export { _Transaction as Transaction };
-export { ReadFileTransaction as readf }
+// export { ReadFileTransaction as readf }
 
 //---------------------//
 
