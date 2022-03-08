@@ -36,10 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.DocumentSV = void 0;
+var CryptoJS = require('crypto-js');
 var pdfnet_node_1 = require("@pdftron/pdfnet-node");
-var fs = require("fs");
 var process_1 = require("process");
-var qr = require('qr-image');
+var qr = require("qr-image");
 var DocumentSV = /** @class */ (function () {
     // ---------------- Preparation --------------------
     // Récuperer le document dont on veut signer
@@ -48,7 +49,7 @@ var DocumentSV = /** @class */ (function () {
     }
     DocumentSV.prototype.Sign = function (docpath, pfxpath) {
         return __awaiter(this, void 0, void 0, function () {
-            var doc, page1, builder, writer, certification_sig_field, widgetAnnot, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, fields_to_lock, element, _l, _m, _o, _p, _q, _r, _s, options, qr_svg, signatureDate, _t, _u, _v, _w, _x, img, _y, _z, _0, _1, err_1;
+            var doc, page1, builder, writer, certification_sig_field, widgetAnnot, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, fields_to_lock, element, _l, _m, _o, _p, _q, _r, _s, qr_svg, signatureDate, _t, _u, _v, _w, _x, img, _y, _z, _0, _1, err_1;
             return __generator(this, function (_2) {
                 switch (_2.label) {
                     case 0:
@@ -134,17 +135,7 @@ var DocumentSV = /** @class */ (function () {
                         return [4 /*yield*/, writer.writeElement(element)];
                     case 24:
                         _2.sent();
-                        options = {
-                            errorCorrectionLevel: 'H',
-                            type: 'png',
-                            quality: 0.9,
-                            margin: 0,
-                            color: {
-                                dark: "#010599FF",
-                                light: "#FFBF60FF"
-                            }
-                        };
-                        return [4 /*yield*/, qr.imageSync("omar", options)];
+                        return [4 /*yield*/, qr.imageSync("omar")];
                     case 25:
                         qr_svg = _2.sent();
                         return [4 /*yield*/, certification_sig_field.getSigningTime()];
@@ -170,8 +161,7 @@ var DocumentSV = /** @class */ (function () {
                         return [4 /*yield*/, writer.writeElement(element)];
                     case 31:
                         _2.sent();
-                        fs.writeFileSync('my-qr-code.png', qr_svg);
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.Image.createFromFile(doc, 'my-qr-code.png')];
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.Image.createFromMemory(doc, qr_svg, 100, 100, 1, new pdfnet_node_1.PDFNet.ColorSpace())];
                     case 32:
                         img = _2.sent();
                         return [4 /*yield*/, builder.createImageScaled(img, 300, 600, 200, -150)];
@@ -197,7 +187,7 @@ var DocumentSV = /** @class */ (function () {
                         return [4 /*yield*/, doc.pagePushBack(page1)];
                     case 40:
                         _2.sent();
-                        return [4 /*yield*/, doc.save('src/app/aaa/mm.pdf', pdfnet_node_1.PDFNet.SDFDoc.SaveOptions.e_remove_unused)];
+                        return [4 /*yield*/, doc.save('src/app/Document/Signed.pdf', pdfnet_node_1.PDFNet.SDFDoc.SaveOptions.e_remove_unused)];
                     case 41:
                         _2.sent();
                         (0, process_1.exit)(1);
@@ -283,23 +273,27 @@ var DocumentSV = /** @class */ (function () {
             });
         });
     };
+    DocumentSV.prototype.getHash = function (in_docpath) {
+        return __awaiter(this, void 0, void 0, function () {
+            var doc, a, _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
+                    case 1:
+                        _c.sent();
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(in_docpath)];
+                    case 2:
+                        doc = _c.sent();
+                        _b = (_a = Buffer).from;
+                        return [4 /*yield*/, doc.saveMemoryBuffer(pdfnet_node_1.PDFNet.SDFDoc.SaveOptions.e_hex_strings)];
+                    case 3:
+                        a = _b.apply(_a, [_c.sent()]);
+                        return [2 /*return*/, CryptoJS.SHA256(a).toString()];
+                }
+            });
+        });
+    };
     return DocumentSV;
 }());
-var a = new DocumentSV();
-function launchVerification() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _b = (_a = console).log;
-                    return [4 /*yield*/, a.verify('CV.pdf')];
-                case 1:
-                    _b.apply(_a, [_c.sent()]);
-                    (0, process_1.exit)(1);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-launchVerification();
+var _DocumentSV = DocumentSV;
+exports.DocumentSV = _DocumentSV;

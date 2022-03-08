@@ -1,16 +1,14 @@
 "use strict";
 exports.__esModule = true;
-exports.readf = exports.Transaction = exports.Block = exports.Blockchain = void 0;
-var CryptoJS = require('crypto-js');
-var Buffer = require('buffer');
+exports.Transaction = exports.Block = exports.Blockchain = void 0;
+var CryptoJS = require("crypto-js");
+var DocumentSV_1 = require("../Document/DocumentSV");
 var EC = require('elliptic').ec;
 var ec = new EC('secp256k1');
-
-function ReadFileTransaction(file) {
-    return Buffer.from(file);
-}
-exports.readf = ReadFileTransaction;
-var Transaction = /** @class */ (function() {
+// function ReadFileTransaction(filepath : string) {
+//   return Buffer.from(fs.readFileSync(filepath));
+// }
+var Transaction = /** @class */ (function () {
     /**
      * @param {string} fromAddress
      * @param {string} toAddress
@@ -18,8 +16,9 @@ var Transaction = /** @class */ (function() {
      */
     function Transaction(fromAddress, toAddress, file) {
         this.fromAddress = fromAddress;
-        this.toAddress = toAddress;
         this.file = file;
+        var docsv = new DocumentSV_1.DocumentSV();
+        docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
         this.timestamp = Date.now();
     }
     /**
@@ -27,8 +26,11 @@ var Transaction = /** @class */ (function() {
      *
      * @returns {string}
      */
-    Transaction.prototype.calculateHash = function() {
-        return CryptoJS.SHA256(this.fromAddress + this.toAddress + this.file + this.timestamp).toString();
+    Transaction.prototype.calculateHash = function () {
+        var docsv = new DocumentSV_1.DocumentSV();
+        var pdfhash = '';
+        docsv.getHash(this.file).then(function (value) { return pdfhash = value; });
+        return CryptoJS.SHA256(this.fromAddress + pdfhash + this.timestamp).toString();
     };
     /**
      * Signe une transaction avec la clé de signature donnée (qui est une paire de clés elliptic
@@ -37,7 +39,7 @@ var Transaction = /** @class */ (function() {
      *
      * @param {string} signingKey
      */
-    Transaction.prototype.signTransaction = function(signingKey) {
+    Transaction.prototype.signTransaction = function (signingKey) {
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
         // clé. Donc, ici, nous vérifions si le fromAddress correspond à votre publicKey
         if (signingKey.getPublic('hex') !== this.fromAddress) {
@@ -55,7 +57,7 @@ var Transaction = /** @class */ (function() {
      *
      * @returns {boolean}
      */
-    Transaction.prototype.isValid = function() {
+    Transaction.prototype.isValid = function () {
         // Si la transaction n'a pas d'adresse d'expédition, nous supposons qu'il s'agit d'une
         // récompense de minage et qu'elle est valide. Vous pouvez vérifier cela dans un
         // manière différente (champ spécial par exemple)
@@ -69,7 +71,7 @@ var Transaction = /** @class */ (function() {
     };
     return Transaction;
 }());
-var Block = /** @class */ (function() {
+var Block = /** @class */ (function () {
     /**
      * @param {number} timestamp
      * @param {Transaction[]} transactions
@@ -88,7 +90,7 @@ var Block = /** @class */ (function() {
      *
      * @returns {string}
      */
-    Block.prototype.calculateHash = function() {
+    Block.prototype.calculateHash = function () {
         return CryptoJS.SHA256(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
     };
     /**
@@ -97,7 +99,7 @@ var Block = /** @class */ (function() {
      *
      * @param {number} difficulty
      */
-    Block.prototype.mineBlock = function(difficulty) {
+    Block.prototype.mineBlock = function (difficulty) {
         while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
             this.nonce++;
             this.hash = this.calculateHash();
@@ -109,7 +111,7 @@ var Block = /** @class */ (function() {
      *
      * @returns {boolean}
      */
-    Block.prototype.hasValidTransactions = function() {
+    Block.prototype.hasValidTransactions = function () {
         for (var _i = 0, _a = this.transactions; _i < _a.length; _i++) {
             var tx = _a[_i];
             if (!tx.isValid()) {
@@ -120,7 +122,7 @@ var Block = /** @class */ (function() {
     };
     return Block;
 }());
-var Blockchain = /** @class */ (function() {
+var Blockchain = /** @class */ (function () {
     function Blockchain() {
         this.dt = Date.now();
         this.chain = [this.createGenesisBlock()];
@@ -130,7 +132,7 @@ var Blockchain = /** @class */ (function() {
     /**
      * @returns {Block}
      */
-    Blockchain.prototype.createGenesisBlock = function() {
+    Blockchain.prototype.createGenesisBlock = function () {
         return new Block(this.dt, [], '');
     };
     /**
@@ -139,7 +141,7 @@ var Blockchain = /** @class */ (function() {
      *
      * @returns {Block[]}
      */
-    Blockchain.prototype.getLatestBlock = function() {
+    Blockchain.prototype.getLatestBlock = function () {
         return this.chain[this.chain.length - 1];
     };
     /**
@@ -148,7 +150,7 @@ var Blockchain = /** @class */ (function() {
      *
      * @param {string} miningAddress
      */
-    Blockchain.prototype.minePendingTransactions = function(miningAddress) {
+    Blockchain.prototype.minePendingTransactions = function (miningAddress) {
         var block = new Block(Date.now(), this.pendingTransactions, this.getLatestBlock().hash);
         block.mineBlock(this.difficulty);
         this.chain.push(block);
@@ -161,9 +163,9 @@ var Blockchain = /** @class */ (function() {
      *
      * @param {Transaction} transaction
      */
-    Blockchain.prototype.addTransaction = function(transaction) {
-        if (!transaction.fromAddress || !transaction.toAddress) {
-            throw new Error('La transaction doit inclure l\'adresse d\'origine et de destination');
+    Blockchain.prototype.addTransaction = function (transaction) {
+        if (!transaction.fromAddress) {
+            throw new Error('La transaction doit inclure l\'adresse d\'origine ');
         }
         // Verifier la transactiion
         if (!transaction.isValid()) {
@@ -179,7 +181,7 @@ var Blockchain = /** @class */ (function() {
      * @param  {string} address
      * @return {Transaction[]}
      */
-    Blockchain.prototype.getAllTransactionsForWallet = function(address) {
+    Blockchain.prototype.getAllTransactionsForWallet = function (address) {
         var txs = [];
         for (var _i = 0, _a = this.chain; _i < _a.length; _i++) {
             var block = _a[_i];
@@ -199,7 +201,7 @@ var Blockchain = /** @class */ (function() {
      *
      * @returns {boolean}
      */
-    Blockchain.prototype.isChainValid = function() {
+    Blockchain.prototype.isChainValid = function () {
         // Vérifiez si le bloc Genesis n'a pas été falsifié en comparant
         // la sortie de createGenesisBlock avec le premier bloc de notre chaîne
         var realGenesis = JSON.stringify(this.createGenesisBlock());
@@ -231,5 +233,6 @@ var _Block = Block;
 exports.Block = _Block;
 var _Transaction = Transaction;
 exports.Transaction = _Transaction;
+// export { ReadFileTransaction as readf }
 //---------------------//
 console.log('hello');

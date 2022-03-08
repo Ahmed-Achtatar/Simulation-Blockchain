@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+// import { PDFNet } from '@pdftron/pdfnet-node';
 import { BlockchainService, IWalletKey } from '../../services/blockchain.service';
-
+import { DocumentSV } from '../../Document/DocumentSV';
 import { Transaction } from "../../blockchain_script/blockchain";
 import * as bAll from "../../blockchain_script/blockchain";
 
@@ -29,6 +29,8 @@ export class CreateTransactionComponent implements OnInit {
 
     const newTx = this.newTx;
     newTx.file =this.chemin;
+    // const docsv = new DocumentSV();
+    // docsv.Sign(this.chemin, '../../Document/certificatea.pfx');
     // Set the FROM address and sign the transaction
     newTx.fromAddress = this.ownWalletKey.publicKey;
     newTx.signTransaction(this.ownWalletKey.keyObj);

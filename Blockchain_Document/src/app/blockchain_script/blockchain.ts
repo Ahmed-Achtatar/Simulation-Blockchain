@@ -1,7 +1,8 @@
 
 import { PDFNet } from '@pdftron/pdfnet-node';
 import * as CryptoJS from 'crypto-js';
-import { DocumentSV } from 'src/app/Document/DocumentSV';
+
+import { DocumentSV } from '../Document/DocumentSV';
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
@@ -22,11 +23,11 @@ class Transaction {
      * @param {string} file
      */
     constructor(fromAddress: any, toAddress: any, file: any) {
+      this.file = file;
         this.fromAddress = fromAddress;
 
         this.file = file;
-        let docsv = new DocumentSV();
-        docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
+
 
         this.timestamp = Date.now();
 
@@ -38,9 +39,12 @@ class Transaction {
      * @returns {string}
      */
     calculateHash() : string {
-      let docsv = new DocumentSV();
 
-        return CryptoJS.SHA256(this.fromAddress + docsv.getHash(this.file) + this.timestamp).toString();
+      let docsv = new DocumentSV();
+      let pdfhash : string = '';
+      // PDFNet.runWithCleanup(docsv.getHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+      docsv.getHash(this.file).then(value => pdfhash = value);
+      return CryptoJS.SHA256(this.fromAddress + pdfhash + this.timestamp).toString();
     }
 
     /**
@@ -51,6 +55,8 @@ class Transaction {
      * @param {string} signingKey
      */
     signTransaction(signingKey: any) {
+      // let docsv = new DocumentSV();
+        // docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
         // clé. Donc, ici, nous vérifions si le fromAddress correspond à votre publicKey
         if (signingKey.getPublic('hex') !== this.fromAddress) {

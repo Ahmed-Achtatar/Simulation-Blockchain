@@ -59,7 +59,7 @@ class DocumentSV {
             //         light: "#FFBF60FF"
             //     }
             // }
-            const qr_svg = await qr.imageSync("omar");
+            const qr_svg =  qr.imageSync("omar");
             const signatureDate = await certification_sig_field.getSigningTime();
             element = await builder.createNewTextRun(`Date: ${(signatureDate).year}/${(signatureDate).month}/${(signatureDate).day} at ${(signatureDate).hour}:${( signatureDate).minute}:${(signatureDate).second}`);
 
@@ -137,9 +137,11 @@ class DocumentSV {
     }
   }
   public async getHash(in_docpath: string){
+    await PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
     const doc = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
     let a = Buffer.from(await doc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_hex_strings));
-    return CryptoJS.SHA256(a).toString();
+    return CryptoJS.SHA256('a').toString();
+    exit(1);
   }
 
 
