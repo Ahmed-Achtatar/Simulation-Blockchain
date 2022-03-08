@@ -19,18 +19,12 @@ class Transaction {
 
     /**
      * @param {string} fromAddress
-     * @param {string} toAddress
      * @param {string} file
      */
-    constructor(fromAddress: any, toAddress: any, file: any) {
+    constructor(fromAddress: any, file: any) {
+      this.fromAddress = fromAddress;
       this.file = file;
-        this.fromAddress = fromAddress;
-
-        this.file = file;
-
-
-        this.timestamp = Date.now();
-
+      this.timestamp = Date.now();
     }
 
     /**
@@ -42,8 +36,8 @@ class Transaction {
 
       let docsv = new DocumentSV();
       let pdfhash : string = '';
-      // PDFNet.runWithCleanup(docsv.getHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
-      docsv.getHash(this.file).then(value => pdfhash = value);
+      PDFNet.runWithCleanup(docsv.getHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+      // docsv.getHash(this.file).then(value => pdfhash = value);
       return CryptoJS.SHA256(this.fromAddress + pdfhash + this.timestamp).toString();
     }
 
