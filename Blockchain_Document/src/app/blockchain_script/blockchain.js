@@ -11,14 +11,11 @@ var ec = new EC('secp256k1');
 var Transaction = /** @class */ (function () {
     /**
      * @param {string} fromAddress
-     * @param {string} toAddress
      * @param {string} file
      */
-    function Transaction(fromAddress, toAddress, file) {
+    function Transaction(fromAddress, file) {
         this.fromAddress = fromAddress;
         this.file = file;
-        var docsv = new DocumentSV_1.DocumentSV();
-        docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
         this.timestamp = Date.now();
     }
     /**
@@ -29,6 +26,7 @@ var Transaction = /** @class */ (function () {
     Transaction.prototype.calculateHash = function () {
         var docsv = new DocumentSV_1.DocumentSV();
         var pdfhash = '';
+        // PDFNet.runWithCleanup(docsv.getHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
         docsv.getHash(this.file).then(function (value) { return pdfhash = value; });
         return CryptoJS.SHA256(this.fromAddress + pdfhash + this.timestamp).toString();
     };
@@ -40,6 +38,8 @@ var Transaction = /** @class */ (function () {
      * @param {string} signingKey
      */
     Transaction.prototype.signTransaction = function (signingKey) {
+        // let docsv = new DocumentSV();
+        // docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
         // clé. Donc, ici, nous vérifions si le fromAddress correspond à votre publicKey
         if (signingKey.getPublic('hex') !== this.fromAddress) {
@@ -227,6 +227,8 @@ var Blockchain = /** @class */ (function () {
     };
     return Blockchain;
 }());
+var newtx = new Transaction(0, '../Document/CV.pdf');
+newtx.calculateHash();
 var _Blockchain = Blockchain;
 exports.Blockchain = _Blockchain;
 var _Block = Block;

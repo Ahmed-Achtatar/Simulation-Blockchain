@@ -52,92 +52,91 @@ var DocumentSV = /** @class */ (function () {
             var doc, page1, builder, writer, certification_sig_field, widgetAnnot, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, fields_to_lock, element, _l, _m, _o, _p, _q, _r, _s, qr_svg, signatureDate, _t, _u, _v, _w, _x, img, _y, _z, _0, _1, err_1;
             return __generator(this, function (_2) {
                 switch (_2.label) {
-                    case 0:
-                        _2.trys.push([0, 42, , 43]);
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
+                    case 0: return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
                     case 1:
                         _2.sent();
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(docpath)];
+                        _2.label = 2;
                     case 2:
+                        _2.trys.push([2, 42, , 43]);
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(docpath)];
+                    case 3:
                         doc = _2.sent();
                         return [4 /*yield*/, doc.getPage(1)];
-                    case 3:
+                    case 4:
                         page1 = _2.sent();
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.ElementBuilder.create()];
-                    case 4:
+                    case 5:
                         builder = _2.sent();
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.ElementWriter.create()];
-                    case 5:
+                    case 6:
                         writer = _2.sent();
                         return [4 /*yield*/, doc.createDigitalSignatureField('Certificate')];
-                    case 6:
+                    case 7:
                         certification_sig_field = _2.sent();
                         return [4 /*yield*/, certification_sig_field.setDocumentPermissions(pdfnet_node_1.PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed)];
-                    case 7:
+                    case 8:
                         _2.sent();
                         _b = (_a = pdfnet_node_1.PDFNet.SignatureWidget).createWithDigitalSignatureField;
                         _c = [doc];
                         _e = (_d = pdfnet_node_1.PDFNet.Rect).bind;
                         _f = parseFloat;
                         return [4 /*yield*/, page1.getPageWidth()];
-                    case 8:
+                    case 9:
                         _g = [void 0, _f.apply(void 0, [(_2.sent()).toString()]) - 200];
                         _h = parseFloat;
                         return [4 /*yield*/, page1.getPageHeight()];
-                    case 9:
+                    case 10:
                         _g = _g.concat([_h.apply(void 0, [(_2.sent()).toString()]) - 750]);
                         _j = parseFloat;
                         return [4 /*yield*/, page1.getPageWidth()];
-                    case 10:
+                    case 11:
                         _g = _g.concat([_j.apply(void 0, [(_2.sent()).toString()]) - 30]);
                         _k = parseFloat;
                         return [4 /*yield*/, page1.getPageHeight()];
-                    case 11: return [4 /*yield*/, _b.apply(_a, _c.concat([new (_e.apply(_d, _g.concat([_k.apply(void 0, [(_2.sent()).toString()]) - 800])))(), certification_sig_field]))];
-                    case 12:
+                    case 12: return [4 /*yield*/, _b.apply(_a, _c.concat([new (_e.apply(_d, _g.concat([_k.apply(void 0, [(_2.sent()).toString()]) - 800])))(), certification_sig_field]))];
+                    case 13:
                         widgetAnnot = _2.sent();
                         return [4 /*yield*/, page1.annotPushBack(widgetAnnot)];
-                    case 13:
+                    case 14:
                         _2.sent();
                         fields_to_lock = ['asdf_test_field'];
                         return [4 /*yield*/, certification_sig_field.setFieldPermissions(pdfnet_node_1.PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock)];
-                    case 14:
+                    case 15:
                         _2.sent();
                         return [4 /*yield*/, certification_sig_field.certifyOnNextSave(pfxpath, 'ahmedahmed')];
-                    case 15:
+                    case 16:
                         _2.sent();
                         // Ajouter les Permissions à la signature
                         return [4 /*yield*/, writer.beginOnPage(page1)];
-                    case 16:
+                    case 17:
                         // Ajouter les Permissions à la signature
                         _2.sent();
                         _m = (_l = builder).createTextBeginWithFont;
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.Font.create(doc, pdfnet_node_1.PDFNet.Font.StandardType1Font.e_times_roman)];
-                    case 17: return [4 /*yield*/, _m.apply(_l, [_2.sent(), 20])];
-                    case 18:
+                    case 18: return [4 /*yield*/, _m.apply(_l, [_2.sent(), 20])];
+                    case 19:
                         element = _2.sent();
                         return [4 /*yield*/, writer.writeElement(element)];
-                    case 19:
+                    case 20:
                         _2.sent();
                         return [4 /*yield*/, builder.createNewTextRun('')];
-                    case 20:
+                    case 21:
                         element = _2.sent();
                         _p = (_o = element).setTextMatrixEntries;
                         _q = [0.5, 0, 0, 0.5];
                         _r = parseFloat;
                         return [4 /*yield*/, page1];
-                    case 21:
+                    case 22:
                         _q = _q.concat([_r.apply(void 0, [((_2.sent()).getPageWidth()).toString()]) - 190]);
                         _s = parseFloat;
                         return [4 /*yield*/, page1];
-                    case 22: return [4 /*yield*/, _p.apply(_o, _q.concat([_s.apply(void 0, [((_2.sent()).getPageHeight()).toString()]) - 760]))];
-                    case 23:
-                        _2.sent();
-                        return [4 /*yield*/, writer.writeElement(element)];
+                    case 23: return [4 /*yield*/, _p.apply(_o, _q.concat([_s.apply(void 0, [((_2.sent()).getPageHeight()).toString()]) - 760]))];
                     case 24:
                         _2.sent();
-                        return [4 /*yield*/, qr.imageSync("omar")];
+                        return [4 /*yield*/, writer.writeElement(element)];
                     case 25:
-                        qr_svg = _2.sent();
+                        _2.sent();
+                        qr_svg = qr.imageSync("omar");
                         return [4 /*yield*/, certification_sig_field.getSigningTime()];
                     case 26:
                         signatureDate = _2.sent();
@@ -210,75 +209,78 @@ var DocumentSV = /** @class */ (function () {
             var doc1, opts, digsig_fitr, verification_status, curr, result, _a, err_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 19, , 20]);
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
+                    case 0: return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
                     case 1:
                         _b.sent();
-                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(in_docpath)];
+                        _b.label = 2;
                     case 2:
+                        _b.trys.push([2, 20, , 21]);
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(in_docpath)];
+                    case 3:
                         doc1 = _b.sent();
                         return [4 /*yield*/, doc1.initSecurityHandler()];
-                    case 3:
+                    case 4:
                         _b.sent();
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.VerificationOptions.create(pdfnet_node_1.PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving)];
-                    case 4:
+                    case 5:
                         opts = _b.sent();
                         return [4 /*yield*/, doc1.getDigitalSignatureFieldIteratorBegin()];
-                    case 5:
+                    case 6:
                         digsig_fitr = _b.sent();
                         verification_status = true;
                         return [4 /*yield*/, doc1.hasSignatures()];
-                    case 6:
-                        if (!!(_b.sent())) return [3 /*break*/, 7];
+                    case 7:
+                        if (!!(_b.sent())) return [3 /*break*/, 8];
                         this.statu = 1;
-                        return [3 /*break*/, 18];
-                    case 7: return [4 /*yield*/, digsig_fitr.hasNext()];
-                    case 8:
-                        if (!_b.sent()) return [3 /*break*/, 18];
-                        return [4 /*yield*/, digsig_fitr.current()];
+                        return [3 /*break*/, 19];
+                    case 8: return [4 /*yield*/, digsig_fitr.hasNext()];
                     case 9:
+                        if (!_b.sent()) return [3 /*break*/, 19];
+                        return [4 /*yield*/, digsig_fitr.current()];
+                    case 10:
                         curr = _b.sent();
                         return [4 /*yield*/, curr.verify(opts)];
-                    case 10:
+                    case 11:
                         result = _b.sent();
                         return [4 /*yield*/, result.getDigestStatus()];
-                    case 11:
-                        _a = (!((_b.sent()) == 1));
-                        if (!_a) return [3 /*break*/, 13];
-                        return [4 /*yield*/, result.getDigestStatus()];
                     case 12:
-                        _a = (!((_b.sent()) == 3));
-                        _b.label = 13;
-                    case 13:
+                        _a = (!((_b.sent()) == 1));
                         if (!_a) return [3 /*break*/, 14];
+                        return [4 /*yield*/, result.getDigestStatus()];
+                    case 13:
+                        _a = (!((_b.sent()) == 3));
+                        _b.label = 14;
+                    case 14:
+                        if (!_a) return [3 /*break*/, 15];
                         this.statu = 2;
-                        return [3 /*break*/, 16];
-                    case 14: return [4 /*yield*/, result.getPermissionsStatus()];
-                    case 15:
+                        return [3 /*break*/, 17];
+                    case 15: return [4 /*yield*/, result.getPermissionsStatus()];
+                    case 16:
                         if ((_b.sent()) != 2) {
                             this.statu = 3;
                         }
-                        _b.label = 16;
-                    case 16: return [4 /*yield*/, digsig_fitr.next()];
-                    case 17:
+                        _b.label = 17;
+                    case 17: return [4 /*yield*/, digsig_fitr.next()];
+                    case 18:
                         _b.sent();
-                        return [3 /*break*/, 7];
-                    case 18: return [2 /*return*/, this.statu];
-                    case 19:
+                        return [3 /*break*/, 8];
+                    case 19: return [2 /*return*/, this.statu];
+                    case 20:
                         err_2 = _b.sent();
                         return [2 /*return*/, this.statu];
-                    case 20: return [2 /*return*/];
+                    case 21: return [2 /*return*/];
                 }
             });
         });
     };
     DocumentSV.prototype.getHash = function (in_docpath) {
         return __awaiter(this, void 0, void 0, function () {
-            var doc, a, _a, _b;
+            var doc, a, _a, _b, e_1;
             return __generator(this, function (_c) {
                 switch (_c.label) {
-                    case 0: return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
+                    case 0:
+                        _c.trys.push([0, 7, , 8]);
+                        return [4 /*yield*/, pdfnet_node_1.PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170')];
                     case 1:
                         _c.sent();
                         return [4 /*yield*/, pdfnet_node_1.PDFNet.PDFDoc.createFromFilePath(in_docpath)];
@@ -286,9 +288,17 @@ var DocumentSV = /** @class */ (function () {
                         doc = _c.sent();
                         _b = (_a = Buffer).from;
                         return [4 /*yield*/, doc.saveMemoryBuffer(pdfnet_node_1.PDFNet.SDFDoc.SaveOptions.e_hex_strings)];
-                    case 3:
-                        a = _b.apply(_a, [_c.sent()]);
-                        return [2 /*return*/, CryptoJS.SHA256(a).toString()];
+                    case 3: return [4 /*yield*/, _b.apply(_a, [_c.sent()])];
+                    case 4:
+                        a = _c.sent();
+                        return [4 /*yield*/, CryptoJS.SHA256('a')];
+                    case 5: return [4 /*yield*/, (_c.sent()).toString()];
+                    case 6: return [2 /*return*/, _c.sent()];
+                    case 7:
+                        e_1 = _c.sent();
+                        console.log(e_1);
+                        return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         });

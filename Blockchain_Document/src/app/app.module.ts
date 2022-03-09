@@ -26,6 +26,7 @@ import { WalletBalanceComponent } from './pages/wallet-balance/wallet-balance.co
     WalletBalanceComponent
   ],
   imports: [
+    
     BrowserModule,
     FormsModule,
     AppRoutingModule
