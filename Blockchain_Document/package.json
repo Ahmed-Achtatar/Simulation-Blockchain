@@ -21,14 +21,18 @@
         "@chilkat/ck-node16-win64": "^9.50.89",
         "@ninja-labs/verify-pdf": "^0.3.9",
         "@pdftron/pdfnet-node": "^9.2.0",
+        "assert": "^2.0.0",
         "browserify-zlib": "^0.2.0",
         "buffer": "^6.0.3",
         "ci": "^2.1.1",
+        "converter-to-sync": "^1.1.8",
         "crypto": "^1.0.1",
         "crypto-js": "^4.1.1",
         "elliptic": "^6.5.4",
         "events": "^3.3.0",
         "fs": "^0.0.1-security",
+        "https": "^1.0.0",
+        "https-browserify": "^1.0.0",
         "js-to-ts-converter": "^0.18.1",
         "node-forge": "^0.10.0",
         "node-signpdf": "^1.4.1",
@@ -38,7 +42,9 @@
         "qrcode": "^1.5.0",
         "rxjs": "~7.4.0",
         "stream-browserify": "^3.0.0",
+        "stream-http": "^3.2.0",
         "tslib": "^2.3.0",
+        "url": "^0.11.0",
         "util": "^0.10.4",
         "webpack": "^5.68.0",
         "zone.js": "~0.11.4"
@@ -58,12 +64,8 @@
         "karma-coverage": "~2.1.0",
         "karma-jasmine": "~4.0.0",
         "karma-jasmine-html-reporter": "~1.7.0",
+        "node-loader": "^2.0.0",
         "typescript": "~4.5.2"
     },
-    "browser": {
-        "zlib": true,
-        "stream": false,
-        "assert": false,
-        "process": false
-    }
+    "browser": {}
 }

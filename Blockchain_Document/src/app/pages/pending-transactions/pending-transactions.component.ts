@@ -18,7 +18,9 @@ export class PendingTransactionsComponent implements OnInit {
 
   ngOnInit() {
     if (this.route.snapshot.paramMap.get('addedTx')) {
-      this.justAddedTx = true;
+
+
+        this.justAddedTx = true;
 
       setTimeout(() => {
         this.justAddedTx = false;

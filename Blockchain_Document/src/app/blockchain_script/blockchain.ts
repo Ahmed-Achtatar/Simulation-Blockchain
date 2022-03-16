@@ -1,7 +1,8 @@
 
-import { PDFNet } from '@pdftron/pdfnet-node';
+
 import * as CryptoJS from 'crypto-js';
 
+import * as cts from 'converter-to-sync';
 
 import { DocumentSV } from '../Document/DocumentSV';
 const EC = require('elliptic').ec;
@@ -33,17 +34,19 @@ class Transaction {
      *
      * @returns {string}
      */
-    calculateHash() : string {
+     calculateHash(): string {
 
-      // let docsv = new DocumentSV();
-      let pdfhash : string = '';
+      let docsv = new DocumentSV();
+      let pdfhash : any = '';
+
       // PDFNet.runWithCleanup(docsv.getHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
-      // docsv.getHash(this.file).then(value => pdfhash = value);
+
+      // docsv.asyncHash(this.file).then((value => pdfhash = value));
       return CryptoJS.SHA256(this.fromAddress + pdfhash + this.timestamp).toString();
     }
 
     /**
-     * Signe une transaction avec la clé de signature donnée (qui est une paire de clés elliptic
+     * Signer une transaction avec la clé de signature donnée (qui est une paire de clés elliptic
      * objet contenant une clé privée). La signature est alors stockée à l'intérieur du
      * objet de transaction et stocké plus tard sur la blockchain.
      *
@@ -54,21 +57,21 @@ class Transaction {
       // let lis : string = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
       // PDFNet.initialize(lis);
 
-        // docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
+        docsv.asyncSign(this.file, 'src/app/Document/certificatea.pfx');
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
         // clé. Donc, ici, nous vérifions si le fromAddress correspond à votre publicKey
-        if (signingKey.getPublic('hex') !== this.fromAddress) {
+        if ( signingKey.getPublic('hex') !== this.fromAddress) {
             throw new Error('Vous ne pouvez pas signer de transactions pour d`\'autres portefeuilles !');
         }
 
 
         // Calcule le hash de cette transaction, signe-le avec la clé
         // et le stocker dans l'objet de transaction
-        const hashTx = this.calculateHash();
-        const sig = signingKey.sign(hashTx, 'base64');
+        const hashTx =  this.calculateHash();
+        const sig =  signingKey.sign(hashTx, 'base64');
 
-        this.signature = sig.toDER('hex');
-
+        this.signature =  sig.toDER('hex');
+        return;
     }
 
     /**
@@ -77,7 +80,7 @@ class Transaction {
      *
      * @returns {boolean}
      */
-    isValid(): boolean {
+    isValid(): boolean{
         // Si la transaction n'a pas d'adresse d'expédition, nous supposons qu'il s'agit d'une
         // récompense de minage et qu'elle est valide. Vous pouvez vérifier cela dans un
         // manière différente (champ spécial par exemple)
@@ -87,8 +90,8 @@ class Transaction {
             throw new Error('acune signature dans cette transaction');
         }
 
-        const publicKey = ec.keyFromPublic(this.fromAddress, 'hex');
-        return publicKey.verify(this.calculateHash(), this.signature);
+        const publicKey =  ec.keyFromPublic(this.fromAddress, 'hex');
+        return  publicKey.verify( this.calculateHash(), this.signature);
     }
 }
 
@@ -293,6 +296,12 @@ const _Transaction = Transaction;
 export { _Transaction as Transaction };
 // export { ReadFileTransaction as readf }
 
-//---------------------//
+//---------------------test-------------------------//
+// let newtx = new Transaction(0,'../Document/jj.pdf');
+// async function test(){
+//   console.log( newtx.calculateHash());
+//   exit(1);
+// }
+// test();
 
 console.log('hello');

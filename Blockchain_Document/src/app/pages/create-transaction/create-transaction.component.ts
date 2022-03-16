@@ -4,7 +4,7 @@ import { PDFNet } from '@pdftron/pdfnet-node';
 import { BlockchainService, IWalletKey } from '../../services/blockchain.service';
 // import { DocumentSV } from '../../Document/DocumentSV';
 import { Transaction } from "../../blockchain_script/blockchain";
-import * as bAll from "../../blockchain_script/blockchain";
+
 
 @Component({
   selector: 'app-create-transaction',
@@ -24,7 +24,7 @@ export class CreateTransactionComponent implements OnInit {
   ngOnInit() {
   }
 
-  
+
   createTransaction() {
     const newTx = this.newTx;
     newTx.file =this.chemin;
@@ -32,7 +32,7 @@ export class CreateTransactionComponent implements OnInit {
     // docsv.Sign(this.chemin, '../../Document/certificatea.pfx');
     // Set the FROM address and sign the transaction
     newTx.fromAddress = this.ownWalletKey.publicKey;
-    
+
     newTx.signTransaction(this.ownWalletKey.keyObj);
 
     try {
