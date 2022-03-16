@@ -2,7 +2,6 @@
 
 import * as CryptoJS from 'crypto-js';
 
-import * as cts from 'converter-to-sync';
 
 import { DocumentSV } from '../Document/DocumentSV';
 const EC = require('elliptic').ec;
@@ -54,8 +53,10 @@ class Transaction {
      */
     signTransaction(signingKey: any) {
       let docsv = new DocumentSV();
+      docsv.init();
       // let lis : string = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
       // PDFNet.initialize(lis);
+      // PDFNet.runWithCleanup(docsv.getHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
 
         docsv.asyncSign(this.file, 'src/app/Document/certificatea.pfx');
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
