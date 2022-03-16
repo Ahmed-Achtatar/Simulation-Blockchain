@@ -11,10 +11,15 @@ class DocumentSV {
     // Récuperer le document dont on veut signer
     constructor() {
         this.statu = 0;
+
     }
-    asyncSign = async function(docpath : string, pfxpath : string) {
+    async init(){
       const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
       await PDFNet.initialize(license);
+     }
+
+    asyncSign = async function(docpath : string, pfxpath : string) {
+
 
       const doc = await PDFNet.PDFDoc.createFromFilePath(docpath);
 
@@ -96,8 +101,7 @@ class DocumentSV {
 
     ///////////////////////////////////////
     public async verify(in_docpath : string) {
-      const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
-      await PDFNet.initialize(license);
+
       try {
 
 
@@ -143,15 +147,10 @@ class DocumentSV {
   public asyncHash = async function(in_docpath: string){
     const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
     await PDFNet.initialize(license);
-
-
     const doc = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
     let a = await Buffer.from(await doc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_hex_strings));
       PDFNet.shutdown();
-
-
-
-
+    return await (await CryptoJS.SHA256('a')).toString();
   }
 
 
