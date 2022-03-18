@@ -1,10 +1,10 @@
-const crypto = require('crypto');
-const EC = require('elliptic').ec;
+import { createHash } from 'crypto';
+import { ec as EC } from 'elliptic';
 const ec = new EC('secp256k1');
-const fs = require('fs');
+import { readFileSync } from 'fs';
 
 function ReadFileTransaction() {
-    return Buffer.from(fs.readFileSync('omar.txt'));
+    return Buffer.from(readFileSync('omar.txt'));
 }
 class Transaction {
     /**
@@ -26,7 +26,7 @@ class Transaction {
      * @returns {string}
      */
     calculateHash() {
-        return crypto.createHash('sha256').update(this.fromAddress + this.toAddress + this.file + this.timestamp).digest('hex');
+        return createHash('sha256').update(this.fromAddress + this.toAddress + this.file + this.timestamp).digest('hex');
     }
 
     /**
@@ -95,7 +95,7 @@ class Block {
      * @returns {string}
      */
     calculateHash() {
-        return crypto.createHash('sha256').update(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).digest('hex');
+        return createHash('sha256').update(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).digest('hex');
     }
 
     /**
@@ -256,9 +256,12 @@ class Blockchain {
     }
 }
 
-module.exports.Blockchain = Blockchain;
-module.exports.Block = Block;
-module.exports.Transaction = Transaction;
+const _Blockchain = Blockchain;
+export { _Blockchain as Blockchain };
+const _Block = Block;
+export { _Block as Block };
+const _Transaction = Transaction;
+export { _Transaction as Transaction };
 
 //---------------------//
 

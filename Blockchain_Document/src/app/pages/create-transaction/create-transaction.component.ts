@@ -21,13 +21,13 @@ export class CreateTransactionComponent implements OnInit {
     this.ownWalletKey = blockchainService.walletKeys[0];
   }
 
-  async ngOnInit() {
+  ngOnInit() {
 
   }
 
   createTransaction() {
     const newTx = this.newTx;
-    newTx.file =this.chemin;
+    // newTx.file =this.chemin;
     // const docsv = new DocumentSV();
     // docsv.Sign(this.chemin, '../../Document/certificatea.pfx');
     // Set the FROM address and sign the transaction

@@ -1,6 +1,6 @@
-const { PDFNet } = require('@pdftron/pdfnet-node');
-const fs = require("fs");
-var qr = require('qr-image');
+import { PDFNet } from '@pdftron/pdfnet-node';
+import { writeFileSync } from "fs";
+import { imageSync } from 'qr-image';
 async function main() {
     try {
         // ---------------- Preparation --------------------
@@ -45,7 +45,7 @@ async function main() {
                 light: "#FFBF60FF"
             }
         }
-        const qr_svg = qr.imageSync("omar", options);
+        const qr_svg = imageSync("omar", options);
 
         const signatureDate = await certification_sig_field.getSigningTime();
         element = await builder.createNewTextRun('Date: ' + signatureDate.year + '/' + signatureDate.month + '/' + signatureDate.day + ' at ' + signatureDate.hour + ':' + signatureDate.minute + ':' + signatureDate.second);
@@ -55,7 +55,7 @@ async function main() {
         builder.createImage
         writer.writeElement(element);
 
-        fs.writeFileSync('./my-qr-code.png', qr_svg);
+        writeFileSync('./my-qr-code.png', qr_svg);
         const img = await PDFNet.Image.createFromFile(doc, './my-qr-code.png');
 
         element = await builder.createImageScaled(img, 300, 600, 200, -150);
