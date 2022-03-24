@@ -1,5 +1,5 @@
 import * as CryptoJS from 'crypto-js';
-import { PDFNet } from '@pdftron/pdfnet-node';
+import * as  pdf  from '@pdftron/pdfnet-node';
 
 import { exit } from 'process';
 import * as qr from 'qr-image';
@@ -14,9 +14,10 @@ class DocumentSV {
 
     }
     async init(){
-      new Promise(resolve => setTimeout(resolve, 36000));
+      //await new Promise(resolve => setTimeout(resolve, 36000));
       const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
-      await PDFNet.initialize(license);
+
+      await pdf.PDFNet.initialize(license);
      }
 
     asyncSign = async function() {
@@ -24,36 +25,36 @@ class DocumentSV {
       const pfxpath : string = 'src/app/Document/certificatea.pfx';
 
 
-      const doc = await PDFNet.PDFDoc.createFromFilePath(docpath);
+      const doc = await pdf.PDFNet.PDFDoc.createFromFilePath(docpath);
 
      const page1 = await doc.getPage(1);
 
-      const builder = await PDFNet.ElementBuilder.create();
+      const builder = await pdf.PDFNet.ElementBuilder.create();
 
 
             // Writer est le responsable d'ajouter du texte,d'image,... à un block de builder
-            const writer = await PDFNet.ElementWriter.create();
+            const writer = await pdf.PDFNet.ElementWriter.create();
 
 
             /*---------------- Ajout d'une E-Signature --------------------*/
 
             const certification_sig_field =  await doc.createDigitalSignatureField('Certificate');
 
-            await certification_sig_field.setDocumentPermissions(PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed);
-            const widgetAnnot = await PDFNet.SignatureWidget.createWithDigitalSignatureField(doc, new PDFNet.Rect(parseFloat((await page1.getPageWidth()).toString()) - 200, parseFloat((await page1.getPageHeight()).toString()) - 750, parseFloat((await page1.getPageWidth()).toString()) - 30, parseFloat((await page1.getPageHeight()).toString()) - 800), certification_sig_field);
+            await certification_sig_field.setDocumentPermissions(pdf.PDFNet.DigitalSignatureField.DocumentPermissions.e_annotating_formfilling_signing_allowed);
+            const widgetAnnot = await pdf.PDFNet.SignatureWidget.createWithDigitalSignatureField(doc, new pdf.PDFNet.Rect(parseFloat((await page1.getPageWidth()).toString()) - 200, parseFloat((await page1.getPageHeight()).toString()) - 750, parseFloat((await page1.getPageWidth()).toString()) - 30, parseFloat((await page1.getPageHeight()).toString()) - 800), certification_sig_field);
 
             await page1.annotPushBack(widgetAnnot);
             const fields_to_lock = ['asdf_test_field'];
 
 
-            await certification_sig_field.setFieldPermissions(PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock);
+            await certification_sig_field.setFieldPermissions(pdf.PDFNet.DigitalSignatureField.FieldPermissions.e_include, fields_to_lock);
 
             await certification_sig_field.certifyOnNextSave(pfxpath, 'ahmedahmed');
 
             // Ajouter les Permissions à la signature
             await writer.beginOnPage(page1);
 
-             let element = await builder.createTextBeginWithFont(await PDFNet.Font.create(doc, PDFNet.Font.StandardType1Font.e_times_roman), 20);
+             let element = await builder.createTextBeginWithFont(await pdf.PDFNet.Font.create(doc, pdf.PDFNet.Font.StandardType1Font.e_times_roman), 20);
             await writer.writeElement(element);
             element = await builder.createNewTextRun('');
             await element.setTextMatrixEntries(0.5, 0, 0, 0.5, parseFloat(((await page1).getPageWidth()).toString()) - 190, parseFloat(((await page1).getPageHeight()).toString()) - 760);
@@ -80,7 +81,7 @@ class DocumentSV {
             await writer.writeElement(element);
 
 
-            const img = await PDFNet.Image.createFromMemory(doc,qr_svg,100,100,1,new PDFNet.ColorSpace());
+            const img = await pdf.PDFNet.Image.createFromMemory(doc,qr_svg,100,100,1,new pdf.PDFNet.ColorSpace());
             element = await builder.createImageScaled( img, 300, 600, 200, -150);
             await writer.writeElement(element);
             await writer.writeElement(await builder.createTextEnd());
@@ -90,7 +91,7 @@ class DocumentSV {
             await doc.pagePushBack( page1);
 
 
-            await doc.save('src/app/Document/Signed.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
+            await doc.save('src/app/Document/Signed.pdf', pdf.PDFNet.SDFDoc.SaveOptions.e_remove_unused);
 
             return;
 
@@ -110,10 +111,10 @@ class DocumentSV {
 
 
         // let in_public_key_file_path = pfxpath;
-        let doc1 = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
+        let doc1 = await pdf.PDFNet.PDFDoc.createFromFilePath(in_docpath);
         await doc1.initSecurityHandler();
-        const opts = await PDFNet.VerificationOptions.create(PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving);
-        // await opts.addTrustedCertificateUString(in_public_key_file_path, PDFNet.VerificationOptions.CertificateTrustFlag.e_default_trust + PDFNet.VerificationOptions.CertificateTrustFlag.e_certification_trust);
+        const opts = await pdf.PDFNet.VerificationOptions.create(pdf.PDFNet.VerificationOptions.SecurityLevel.e_compatibility_and_archiving);
+        // await opts.addTrustedCertificateUString(in_public_key_file_path, pdf.PDFNet.VerificationOptions.CertificateTrustFlag.e_default_trust + pdf.PDFNet.VerificationOptions.CertificateTrustFlag.e_certification_trust);
 
         const digsig_fitr = await doc1.getDigitalSignatureFieldIteratorBegin();
 
@@ -149,13 +150,13 @@ class DocumentSV {
   }
   public asyncHash = async function(in_docpath: string){
     const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
-    await PDFNet.initialize(license);
+    await pdf.PDFNet.initialize(license);
 
 
 
-    const doc = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
-    let a = await Buffer.from(await doc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_hex_strings));
-      PDFNet.shutdown();
+    const doc = await pdf.PDFNet.PDFDoc.createFromFilePath(in_docpath);
+    let a = await Buffer.from(await doc.saveMemoryBuffer(pdf.PDFNet.SDFDoc.SaveOptions.e_hex_strings));
+      pdf.PDFNet.shutdown();
     return await (await CryptoJS.SHA256('a')).toString();
   }
 

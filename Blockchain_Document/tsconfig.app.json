@@ -11,6 +11,7 @@
     "src/main.ts",
     "src/polyfills.ts"
   ],
+
   "include": [
     "src/**/*.d.ts",
     "src/app/blockchain_script/blockchain.ts"

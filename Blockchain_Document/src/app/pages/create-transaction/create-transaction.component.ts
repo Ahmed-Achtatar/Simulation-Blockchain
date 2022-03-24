@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PDFNet } from '@pdftron/pdfnet-node';
+import { DocumentSV } from '../../Document/DocumentSV';
 import { BlockchainService, IWalletKey } from '../../services/blockchain.service';
 // import { DocumentSV } from '../../Document/DocumentSV';
 import { Transaction } from "../../blockchain_script/blockchain";
