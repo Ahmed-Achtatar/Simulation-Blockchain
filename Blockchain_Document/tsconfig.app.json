@@ -13,7 +13,9 @@
   ],
 
   "include": [
+    "srv/app/Document/DocumentSV",
     "src/**/*.d.ts",
+     "node_modules/@pdftron/pdfnet-node/lib/types.d.ts",
     "src/app/blockchain_script/blockchain.ts"
   ],
   "types": [ "node" ],

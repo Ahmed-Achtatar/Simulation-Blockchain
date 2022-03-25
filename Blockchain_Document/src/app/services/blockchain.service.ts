@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PDFNet } from '@pdftron/pdfnet-node';
+import * as PDFNet from '@pdftron/pdfnet-node';
 import { DocumentSV } from '../Document/DocumentSV';
 import * as BC from "../blockchain_script/blockchain";
 import * as EC from 'elliptic';

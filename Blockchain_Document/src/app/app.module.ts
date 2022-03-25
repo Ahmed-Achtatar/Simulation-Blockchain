@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { PDFNet } from '@pdftron/pdfnet-node';
+import * as PDFNet from '@pdftron/pdfnet-node';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BlockViewComponent } from './component/block-view/block-view.component';
@@ -16,6 +16,7 @@ import { WalletBalanceComponent } from './pages/wallet-balance/wallet-balance.co
 
 @NgModule({
   declarations: [
+
     AppComponent,
     BlockViewComponent,
     BlockchainViewerComponent,
@@ -26,7 +27,6 @@ import { WalletBalanceComponent } from './pages/wallet-balance/wallet-balance.co
     WalletBalanceComponent
   ],
   imports: [
-    
     BrowserModule,
     FormsModule,
     AppRoutingModule

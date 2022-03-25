@@ -1,8 +1,8 @@
 
 
 import * as CryptoJS from 'crypto-js';
+import * as PDFNet from '@pdftron/pdfnet-node';
 
-import { PDFNet } from '@pdftron/pdfnet-node';
 import { DocumentSV } from '../Document/DocumentSV';
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
