@@ -1,0 +1,9 @@
+{
+    "require": {
+        "tecnickcom/tcpdf": "^6.4",
+        "setasign/fpdi": "^2.3",
+        "setasign/fpdf": "^1.8",
+        "propa/tcpdi": "^1.3",
+        "chillerlan/php-qrcode": "^4.3"
+    }
+}

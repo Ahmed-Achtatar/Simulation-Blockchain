@@ -1,7 +1,7 @@
 
-import { PDFNet } from '@pdftron/pdfnet-node';
+import * as PDFNet  from '@pdftron/pdfnet-node';
 import * as CryptoJS from 'crypto-js';
-import { DocumentSV } from 'src/app/Document/DocumentSV';
+// import { DocumentSV } from 'src/app/Document/DocumentSV';
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
@@ -25,8 +25,8 @@ class Transaction {
         this.fromAddress = fromAddress;
 
         this.file = file;
-        let docsv = new DocumentSV();
-        docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
+        // let docsv = new DocumentSV();
+        // docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
 
         this.timestamp = Date.now();
 
@@ -38,9 +38,9 @@ class Transaction {
      * @returns {string}
      */
     calculateHash() : string {
-      let docsv = new DocumentSV();
+      // let docsv = new DocumentSV();
 
-        return CryptoJS.SHA256(this.fromAddress + docsv.getHash(this.file) + this.timestamp).toString();
+        return CryptoJS.SHA256(this.fromAddress + this.file + this.timestamp).toString();
     }
 
     /**

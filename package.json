@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "browserify-zlib": "^0.2.0",
-    "process": "^0.11.10"
-  }
-}

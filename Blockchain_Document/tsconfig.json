@@ -5,7 +5,8 @@
     "paths": {
       "stream": [ "./node_modules/stream-browserify" ],
       "zlib": ["./node_modules/browserify-zlib"],
-      "process": ["./node_modules/process"]
+      "process": ["./node_modules/process"],
+      "assert":["./node_modules/assert"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -22,8 +23,9 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
-    "module": "esnext",
+    "target": "ES2020",
+    "module": "ES2020",
+
     "lib": [
       "es2020",
       "dom"
@@ -36,6 +38,7 @@
     ],
   },
   "angularCompilerOptions": {
+    "strictPropertyInitialization": false,
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

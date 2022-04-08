@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 
 import * as BC from "../blockchain_script/blockchain";
+import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import * as EC from 'elliptic';
-
+import { Transaction } from '../blockchain_script/blockchain';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,10 +12,12 @@ export class BlockchainService {
   public blockchainInstance = new BC.Blockchain();
   public walletKeys: Array<IWalletKey> = [];
 
-  constructor() {
+  constructor(private http: HttpClient) {
+
     this.blockchainInstance.difficulty = 1;
     this.blockchainInstance.minePendingTransactions('hi');
     this.generateWalletKeys();
+
   }
 
   minePendingTransactions() {
@@ -43,8 +47,8 @@ export class BlockchainService {
     return this.blockchainInstance.pendingTransactions;
   }
 
-  addTransaction(tx: Transaction) {
-    this.blockchainInstance.addTransaction(tx : BC.Transaction);
+  addTransaction(tx: any) {
+    this.blockchainInstance.addTransaction(tx);
   }
 }
 

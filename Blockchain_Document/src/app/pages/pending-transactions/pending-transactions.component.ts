@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { BlockchainService } from '../../services/blockchain.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class PendingTransactionsComponent implements OnInit {
   public miningInProgress = false;
   public justAddedTx = false;
 
-  constructor(private blockchainService: BlockchainService, private router: Router, private route: ActivatedRoute) {
+  constructor(private http: HttpClient,private blockchainService: BlockchainService, private router: Router, private route: ActivatedRoute) {
     this.pendingTransactions = blockchainService.getPendingTransactions();
   }
 

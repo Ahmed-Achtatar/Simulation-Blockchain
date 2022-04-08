@@ -1,6 +1,6 @@
 const CryptoJS = require('crypto-js');
-import { PDFNet } from '@pdftron/pdfnet-node';
 
+const { PDFNet } = require('@pdftron/pdfnet-node');
 import { exit } from 'process';
 import * as qr from 'qr-image';
 

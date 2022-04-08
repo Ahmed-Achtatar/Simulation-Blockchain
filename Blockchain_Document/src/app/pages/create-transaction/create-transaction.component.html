@@ -11,10 +11,9 @@
 	    	This is your wallet address. You cannot change it because you can only spend your own coins.
 	    </small>
     </div>
-
+    <div>{{this.data}}</div>
     <div class="form-group">
-        <!-- <input type="file" class="form-control" id="file" aria-describedby="fileHelp" [(ngModel)]="newTx.file"> -->
-        <input type="file" id="file" name="file" [(ngModel)]="chemin">
+        <input type="file" id="file" name="file" (change)="onFileChanged($event)">
     </div>
     <button (click)="createTransaction()" type="submit" class="btn btn-primary">Sign & create transaction</button>
 </div>
