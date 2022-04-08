@@ -1,7 +1,15 @@
 
+<<<<<<< HEAD
 import * as PDFNet  from '@pdftron/pdfnet-node';
 import * as CryptoJS from 'crypto-js';
 // import { DocumentSV } from 'src/app/Document/DocumentSV';
+=======
+
+import * as CryptoJS from 'crypto-js';
+import * as PDFNet from '@pdftron/pdfnet-node';
+
+import { DocumentSV } from '../Document/DocumentSV';
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
@@ -18,9 +26,9 @@ class Transaction {
 
     /**
      * @param {string} fromAddress
-     * @param {string} toAddress
      * @param {string} file
      */
+<<<<<<< HEAD
     constructor(fromAddress: any, toAddress: any, file: any) {
         this.fromAddress = fromAddress;
 
@@ -30,6 +38,12 @@ class Transaction {
 
         this.timestamp = Date.now();
 
+=======
+    constructor(fromAddress: any, file: any) {
+      this.fromAddress = fromAddress;
+      this.file = file;
+      this.timestamp = Date.now();
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
     }
 
     /**
@@ -37,34 +51,52 @@ class Transaction {
      *
      * @returns {string}
      */
+<<<<<<< HEAD
     calculateHash() : string {
       // let docsv = new DocumentSV();
 
         return CryptoJS.SHA256(this.fromAddress + this.file + this.timestamp).toString();
+=======
+     calculateHash(): string {
+
+      let docsv = new DocumentSV();
+      let pdfhash : any = '';
+
+
+      // docsv.asyncHash(this.file).then((value => pdfhash = value));
+      return CryptoJS.SHA256(this.fromAddress + pdfhash + this.timestamp).toString();
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
     }
 
     /**
-     * Signe une transaction avec la clé de signature donnée (qui est une paire de clés elliptic
+     * Signer une transaction avec la clé de signature donnée (qui est une paire de clés elliptic
      * objet contenant une clé privée). La signature est alors stockée à l'intérieur du
      * objet de transaction et stocké plus tard sur la blockchain.
      *
      * @param {string} signingKey
      */
     signTransaction(signingKey: any) {
+      let docsv = new DocumentSV();
+      docsv.init();
+      // let lis : string = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
+      // PDFNet.initialize(lis);
+      // PDFNet.runWithCleanup(docsv.asyncHash,'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+
+        // docsv.asyncSign('src/app/Document/CV.pdf', 'src/app/Document/certificatea.pfx');
         // Vous ne pouvez envoyer une transaction qu'à partir du portefeuille lié à votre
         // clé. Donc, ici, nous vérifions si le fromAddress correspond à votre publicKey
-        if (signingKey.getPublic('hex') !== this.fromAddress) {
+        if ( signingKey.getPublic('hex') !== this.fromAddress) {
             throw new Error('Vous ne pouvez pas signer de transactions pour d`\'autres portefeuilles !');
         }
 
 
         // Calcule le hash de cette transaction, signe-le avec la clé
         // et le stocker dans l'objet de transaction
-        const hashTx = this.calculateHash();
-        const sig = signingKey.sign(hashTx, 'base64');
+        const hashTx =  this.calculateHash();
+        const sig =  signingKey.sign(hashTx, 'base64');
 
-        this.signature = sig.toDER('hex');
-
+        this.signature =  sig.toDER('hex');
+        return;
     }
 
     /**
@@ -73,7 +105,7 @@ class Transaction {
      *
      * @returns {boolean}
      */
-    isValid(): boolean {
+    isValid(): boolean{
         // Si la transaction n'a pas d'adresse d'expédition, nous supposons qu'il s'agit d'une
         // récompense de minage et qu'elle est valide. Vous pouvez vérifier cela dans un
         // manière différente (champ spécial par exemple)
@@ -83,8 +115,8 @@ class Transaction {
             throw new Error('acune signature dans cette transaction');
         }
 
-        const publicKey = ec.keyFromPublic(this.fromAddress, 'hex');
-        return publicKey.verify(this.calculateHash(), this.signature);
+        const publicKey =  ec.keyFromPublic(this.fromAddress, 'hex');
+        return  publicKey.verify( this.calculateHash(), this.signature);
     }
 }
 
@@ -281,7 +313,6 @@ class Blockchain {
     }
 }
 
-
 const _Blockchain = Blockchain;
 export { _Blockchain as Blockchain };
 const _Block = Block;
@@ -290,6 +321,12 @@ const _Transaction = Transaction;
 export { _Transaction as Transaction };
 // export { ReadFileTransaction as readf }
 
-//---------------------//
+//---------------------test-------------------------//
+// let newtx = new Transaction(0,'../Document/jj.pdf');
+// async function test(){
+//   console.log( newtx.calculateHash());
+//   exit(1);
+// }
+// test();
 
 console.log('hello');

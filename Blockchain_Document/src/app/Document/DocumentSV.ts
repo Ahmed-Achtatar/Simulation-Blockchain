@@ -1,19 +1,37 @@
+<<<<<<< HEAD
 const CryptoJS = require('crypto-js');
 
 const { PDFNet } = require('@pdftron/pdfnet-node');
+=======
+import * as CryptoJS from 'crypto-js';
+import * as  PDFNet  from '@pdftron/pdfnet-node';
+import {initialize} from '@pdftron/pdfnet-node';
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
 import { exit } from 'process';
 import * as qr from 'qr-image';
 
 class DocumentSV {
   public statu: number;
+
     // ---------------- Preparation --------------------
     // Récuperer le document dont on veut signer
     constructor() {
         this.statu = 0;
+
     }
-    async Sign(docpath : string, pfxpath : string) {
-      try {
-      await PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+    async init(){
+      console.log('sssssssssss');
+      //await new Promise(resolve => setTimeout(resolve, 36000));
+      const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
+
+      await initialize(license);
+     }
+
+    asyncSign = async function() {
+      const docpath : string = 'src/app/Document/CV.pdf';
+      const pfxpath : string = 'src/app/Document/certificatea.pfx';
+
+
       const doc = await PDFNet.PDFDoc.createFromFilePath(docpath);
 
      const page1 = await doc.getPage(1);
@@ -59,7 +77,7 @@ class DocumentSV {
             //         light: "#FFBF60FF"
             //     }
             // }
-            const qr_svg = await qr.imageSync("omar");
+            const qr_svg =  qr.imageSync("omar");
             const signatureDate = await certification_sig_field.getSigningTime();
             element = await builder.createNewTextRun(`Date: ${(signatureDate).year}/${(signatureDate).month}/${(signatureDate).day} at ${(signatureDate).hour}:${( signatureDate).minute}:${(signatureDate).second}`);
 
@@ -81,11 +99,9 @@ class DocumentSV {
 
 
             await doc.save('src/app/Document/Signed.pdf', PDFNet.SDFDoc.SaveOptions.e_remove_unused);
-            exit(1);
 
-          } catch (err) {
-            console.log('error', err)
-        }
+            return;
+
           }
         // Récuperer la page dont on veut signer
 
@@ -96,8 +112,10 @@ class DocumentSV {
 
     ///////////////////////////////////////
     public async verify(in_docpath : string) {
+
       try {
-        await PDFNet.initialize('demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170');
+
+
 
         // let in_public_key_file_path = pfxpath;
         let doc1 = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
@@ -131,15 +149,22 @@ class DocumentSV {
 
       return this.statu;
 
+
       } catch (err) {
 
         return this.statu;
     }
   }
-  public async getHash(in_docpath: string){
+  public asyncHash = async function(in_docpath: string){
+    const license : string  = 'demo:omaralami230@gmail.com:7b01f4ab020000000092768e068e8737e8b8c939452e7892e0470df170';
+    await PDFNet.initialize(license);
+
+
+
     const doc = await PDFNet.PDFDoc.createFromFilePath(in_docpath);
-    let a = Buffer.from(await doc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_hex_strings));
-    return CryptoJS.SHA256(a).toString();
+    let a = await Buffer.from(await doc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_hex_strings));
+      PDFNet.shutdown();
+    return await (await CryptoJS.SHA256('a')).toString();
   }
 
 

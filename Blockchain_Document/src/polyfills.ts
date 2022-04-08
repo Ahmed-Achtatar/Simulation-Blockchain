@@ -46,11 +46,18 @@
  * Zone JS is required by default for Angular itself.
  */
 import 'zone.js';  // Included with Angular CLI.
+<<<<<<< HEAD
 
 (window as any).global = window;
 (window as any).process = { env: { DEBUG: undefined }, };
 global.Buffer = global.Buffer || require("buffer").Buffer; // eslint-disable-line
 
+=======
+(window as any).global = window;
+(window as any).process = { env: { DEBUG: undefined }, };
+// @ts-ignore
+window.Buffer = window.Buffer || require('buffer').Buffer;
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */

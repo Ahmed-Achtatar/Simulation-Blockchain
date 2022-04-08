@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-
+import * as PDFNet from '@pdftron/pdfnet-node';
+import { DocumentSV } from '../Document/DocumentSV';
 import * as BC from "../blockchain_script/blockchain";
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';

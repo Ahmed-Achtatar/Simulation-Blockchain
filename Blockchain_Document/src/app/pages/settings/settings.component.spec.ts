@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import 'jest';
 import { SettingsComponent } from './settings.component';
 
 describe('SettingsComponent', () => {

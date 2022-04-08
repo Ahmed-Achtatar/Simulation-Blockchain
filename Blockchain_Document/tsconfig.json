@@ -1,12 +1,20 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+
   "compileOnSave": false,
   "compilerOptions": {
+
     "paths": {
       "stream": [ "./node_modules/stream-browserify" ],
       "zlib": ["./node_modules/browserify-zlib"],
       "process": ["./node_modules/process"],
+<<<<<<< HEAD
       "assert":["./node_modules/assert"]
+=======
+      "https": ["./node_modules/https-browserify"],
+      "url": ["./node_modules/url"],
+      "http": ["./node_modules/stream-http"]
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -15,7 +23,7 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,

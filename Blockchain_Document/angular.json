@@ -24,19 +24,36 @@
                         "tsConfig": "tsconfig.app.json",
                         "assets": [
                             "src/favicon.ico",
+<<<<<<< HEAD
                             "src/assets"
+=======
+                            "src/assets",
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/pspdfkit/dist/pspdfkit-lib/",
+                                "output": "./assets/pspdfkit-lib/"
+                            }
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
                         ],
                         "styles": [
                             "src/styles.css"
                         ],
+<<<<<<< HEAD
                         "scripts": []
+=======
+                        "scripts": ["node_modules/@pdftron/pdfnet-node/lib/pdfnet.js"]
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
                     },
                     "configurations": {
                         "production": {
                             "budgets": [{
                                     "type": "initial",
                                     "maximumWarning": "500kb",
+<<<<<<< HEAD
                                     "maximumError": "2mb"
+=======
+                                    "maximumError": "1mb"
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
                                 },
                                 {
                                     "type": "anyComponentStyle",
@@ -100,4 +117,8 @@
         }
     },
     "defaultProject": "Blockchain"
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ad30cad78f598ffc5ba25ece0852301741019330
