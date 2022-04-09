@@ -24,7 +24,7 @@ if($_FILES){
       $pdf->AddPage();
       $pdf->useTemplate($tplIdx);
   }
-
+  $linktoblock = "";
 
 
   // $pdf->Output('example_052.pdf', 'D');

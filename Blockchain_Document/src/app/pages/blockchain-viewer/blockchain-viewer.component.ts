@@ -6,6 +6,7 @@ import { BlockchainService } from '../../services/blockchain.service';
   styleUrls: ['./blockchain-viewer.component.scss']
 })
 export class BlockchainViewerComponent implements OnInit {
+  public id: number | any = 1;
 
   public blocks:any = [];
   public selectedBlock:any = null;

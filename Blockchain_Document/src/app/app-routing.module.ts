@@ -8,7 +8,8 @@ import { WalletBalanceComponent } from 'src/app/pages/wallet-balance/wallet-bala
 import { VerifyPdfComponent } from 'src/app/pages/verify-pdf/verify-pdf.component';
 
 const routes: Routes = [
-  {path: '', component: BlockchainViewerComponent },
+
+  {path: ':id', component: BlockchainViewerComponent },
   {path: 'settings', component: SettingsComponent},
   {path: 'verify', component: VerifyPdfComponent},
   {path: 'new/transaction', component: CreateTransactionComponent },
