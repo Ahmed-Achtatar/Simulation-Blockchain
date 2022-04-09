@@ -45,22 +45,22 @@ export class CreateTransactionComponent implements OnInit {
       console.log(event);
     })
 
-    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/hash.php')
-    .subscribe((response) => {
-      this.data = response;
-      console.log(this.data);
-      const newTx = this.newTx;
-      newTx.file =response;
-    // Set the FROM address and sign the transaction
-      newTx.fromAddress = this.ownWalletKey.publicKey;
-      newTx.signTransaction(this.ownWalletKey.keyObj);
-      try {
-        this.blockchainService.addTransaction(this.newTx);
-      } catch (e) {
-        alert(e);
-        return;
-      }
-    });
+    // this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/hash.php')
+    // .subscribe((response) => {
+    //   this.data = response;
+    //   console.log(this.data);
+    //   const newTx = this.newTx;
+    //   newTx.file =response;
+    // // Set the FROM address and sign the transaction
+    //   newTx.fromAddress = this.ownWalletKey.publicKey;
+    //   newTx.signTransaction(this.ownWalletKey.keyObj);
+    //   try {
+    //     this.blockchainService.addTransaction(this.newTx);
+    //   } catch (e) {
+    //     alert(e);
+    //     return;
+    //   }
+    // });
 
 
 

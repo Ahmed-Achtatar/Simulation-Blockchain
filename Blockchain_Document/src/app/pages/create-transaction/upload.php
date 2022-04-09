@@ -18,7 +18,7 @@ if($_FILES){
   move_uploaded_file($_FILES["myPDF"]["tmp_name"], $target_file);
 
   //Merging of the existing PDF pages to the final PDF
-  $pageCount = $pdf->setSourceFile($target_file);
+  $pageCount = $pdf->setSourceFile("CV.pdf");
   for ($i = 1; $i <= $pageCount; $i++) {
       $tplIdx = $pdf->importPage($i, '/MediaBox');
       $pdf->AddPage();
