@@ -4,7 +4,7 @@
 </div>
 
 <div class="container" style="overflow-x: scroll;white-space: nowrap;">
-    <app-block-view *ngFor="let block of blocks" [block]="block" [selectedBlock]="selectedBlock" (click)="showTransactions(block)" [routerLink]="['', id]"></app-block-view>
+    <app-block-view *ngFor="let block of blocks" [block]="block" [selectedBlock]="selectedBlock" (click)="showTransactions(block)"></app-block-view>
 </div>
 
 <br><br>

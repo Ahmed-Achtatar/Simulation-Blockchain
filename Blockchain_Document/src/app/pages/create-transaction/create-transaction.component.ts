@@ -35,9 +35,9 @@ export class CreateTransactionComponent implements OnInit {
 
   createTransaction() {
     const uploadDT = new FormData();
-    var blockNum = this.blockchainService.blockchainInstance.chain.length.toString;
+    // var blockNum = this.blockchainService.blockchainInstance.chain.length.toString;
     uploadDT.append("myPDF",this.selectedFile,this.selectedFile.name);
-    uploadDT.append("number",blockNum);
+    // uploadDT.append("number",blockNum);
 
     this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/upload.php',uploadDT,{
       reportProgress: true,
@@ -62,6 +62,7 @@ export class CreateTransactionComponent implements OnInit {
         alert(e);
         return;
       }
+
     });
 
 

@@ -9,7 +9,7 @@ import { VerifyPdfComponent } from 'src/app/pages/verify-pdf/verify-pdf.componen
 
 const routes: Routes = [
 
-  {path: ':id', component: BlockchainViewerComponent },
+  {path: '', component: BlockchainViewerComponent },
   {path: 'settings', component: SettingsComponent},
   {path: 'verify', component: VerifyPdfComponent},
   {path: 'new/transaction', component: CreateTransactionComponent },
