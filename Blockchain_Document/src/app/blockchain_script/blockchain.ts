@@ -23,11 +23,9 @@ class Transaction {
      */
     constructor(fromAddress: any, toAddress: any, file: any) {
         this.fromAddress = fromAddress;
-
         this.file = file;
         // let docsv = new DocumentSV();
         // docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
-
         this.timestamp = Date.now();
 
     }

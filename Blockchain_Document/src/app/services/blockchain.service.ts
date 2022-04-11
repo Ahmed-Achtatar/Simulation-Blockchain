@@ -24,6 +24,29 @@ export class BlockchainService {
     this.blockchainInstance.minePendingTransactions(
       this.walletKeys[0].publicKey
     );
+    const uploadDT = new FormData();
+    // var blockNum = this.blockchainService.blockchainInstance.chain.length.toString;
+    uploadDT.append("blockhash",this.blockchainInstance.getLatestBlock().hash);
+    uploadDT.append("blocknonce",this.blockchainInstance.getLatestBlock().nonce);
+    uploadDT.append("blockprev",this.blockchainInstance.getLatestBlock().previousHash);
+    uploadDT.append("blockTSt",this.blockchainInstance.getLatestBlock().timestamp);
+    var num: number = 0;
+    this.blockchainInstance.getLatestBlock().transactions.forEach(t => {
+      num++
+      uploadDT.append("trfile" + num ,t.file);
+      uploadDT.append("trTSt" + num ,t.timestamp);
+      uploadDT.append("trAddress" + num ,t.fromAddress);
+    });
+
+
+    this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/DB/insertBlock.php',uploadDT,{
+      reportProgress: true,
+      observe: 'events'
+    })
+    .subscribe(event => {
+      console.log(event);
+
+    });
   }
 
   addressIsFromCurrentUser(address: any) {
@@ -49,6 +72,7 @@ export class BlockchainService {
 
   addTransaction(tx: any) {
     this.blockchainInstance.addTransaction(tx);
+
   }
 }
 
