@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import * as EC from 'elliptic';
 import { Transaction } from '../blockchain_script/blockchain';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +21,25 @@ export class BlockchainService {
 
   }
 
+
+  RetrieveB(){
+    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/DB/retrieveB.php')
+    .subscribe((response) => {
+    var ret ;
+    ret = response;
+    ret.forEach(b => {
+      this.blockchainInstance.chain
+    });
+    });
+  }
+
+  RetrieveTr(){
+    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/DB/retrieveTr.php')
+    .subscribe((response) => {
+      console.log(response);
+    });
+  }
+
   minePendingTransactions() {
     this.blockchainInstance.minePendingTransactions(
       this.walletKeys[0].publicKey
@@ -32,11 +52,13 @@ export class BlockchainService {
     uploadDT.append("blockTSt",this.blockchainInstance.getLatestBlock().timestamp);
     var num: number = 0;
     this.blockchainInstance.getLatestBlock().transactions.forEach(t => {
-      num++
+      num++;
       uploadDT.append("trfile" + num ,t.file);
       uploadDT.append("trTSt" + num ,t.timestamp);
       uploadDT.append("trAddress" + num ,t.fromAddress);
     });
+
+    uploadDT.append("num", num.toString());
 
 
     this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/DB/insertBlock.php',uploadDT,{
@@ -66,10 +88,14 @@ export class BlockchainService {
     console.log(this.walletKeys);
   }
 
-  getPendingTransactions() {
-    return this.blockchainInstance.pendingTransactions;
-  }
+   getPendingTransactions() {
+  //   this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/hash.php')
+  //   .subscribe((response) => {
+  //     this.blockchainInstance.pendingTransactions = response;
 
+  // });
+  return this.blockchainInstance.pendingTransactions;
+}
   addTransaction(tx: any) {
     this.blockchainInstance.addTransaction(tx);
 

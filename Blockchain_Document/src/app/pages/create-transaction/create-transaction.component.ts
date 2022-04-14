@@ -33,14 +33,10 @@ export class CreateTransactionComponent implements OnInit {
     console.log(event);
   }
 
-  createTransaction() {
-
-
+  uploadPDF(){
     const uploadDT = new FormData();
-    // var blockNum = this.blockchainService.blockchainInstance.chain.length.toString;
-    uploadDT.append("myPDF",this.selectedFile,this.selectedFile.name);
-    // uploadDT.append("number",blockNum);
 
+    uploadDT.append("myPDF",this.selectedFile,this.selectedFile.name);
     this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/upload.php',uploadDT,{
       reportProgress: true,
       observe: 'events'
@@ -48,9 +44,14 @@ export class CreateTransactionComponent implements OnInit {
     .subscribe(event => {
       console.log(event);
 
-    })
+    });
+  }
+
+  hashPDF(){
+    setTimeout(() => {
     this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/hash.php')
     .subscribe((response) => {
+
       this.data = response;
       console.log(this.data);
       const newTx = this.newTx;
@@ -64,16 +65,16 @@ export class CreateTransactionComponent implements OnInit {
         alert(e);
         return;
       }
+    })}, 1000);
+  }
 
-    });
-
-
-
-
-
-
+  async createTransaction() {
+     this.uploadPDF();
+    this.hashPDF();
 
 
-    this.router.navigate(['/new/transaction/pending', { addedTx: true }]);
+    // uploadDT.append("number",blockNum);
+
+    await this.router.navigate(['/new/transaction/pending', { addedTx: true }]);
   }
 }

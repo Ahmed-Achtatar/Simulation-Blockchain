@@ -12,6 +12,8 @@ export class BlockchainViewerComponent implements OnInit {
   public selectedBlock:any = null;
 
   constructor(private blockchainService: BlockchainService) {
+    this.blockchainService.RetrieveB();
+    this.blockchainService.RetrieveTr();
     this.blocks = blockchainService.blockchainInstance.chain;
     this.selectedBlock = this.blocks[0];
     console.log(this.blocks);

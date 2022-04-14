@@ -13,7 +13,7 @@
     </div>
     <div>{{this.data}}</div>
     <div class="form-group">
-        <input type="file" id="file" name="file" (change)="onFileChanged($event)">
+        <input type="file" id="file" name="file" (change)="onFileChanged($event)" accept="application/pdf">
     </div>
     <button (click)="createTransaction()" type="submit" class="btn btn-primary">Sign & create transaction</button>
 </div>
