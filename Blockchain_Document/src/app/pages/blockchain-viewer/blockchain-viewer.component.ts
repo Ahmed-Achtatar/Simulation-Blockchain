@@ -20,10 +20,6 @@ export class BlockchainViewerComponent implements OnInit {
     setTimeout(() => {this.selectedBlock = this.blocks.find(el => el.id_B == this.blockchainService.selectedId)},1100);
 
   }
-
-
-
-
   async retrieved(){}
   ngOnInit() {
     this.route.params.subscribe( (params) => {

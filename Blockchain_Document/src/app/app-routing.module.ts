@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { BlockViewComponent } from './component/block-view/block-view.component';
 import { BlockchainViewerComponent } from 'src/app/pages/blockchain-viewer/blockchain-viewer.component';
 import { SettingsComponent } from 'src/app/pages/settings/settings.component';
 import { CreateTransactionComponent } from 'src/app/pages/create-transaction/create-transaction.component';
@@ -12,8 +11,8 @@ const routes: Routes = [
   {path: '', component: BlockchainViewerComponent },
   {path: ':idb', component: BlockchainViewerComponent },
   // {path: 'block/:idb', component: BlockViewComponent },
-  {path: 'settings', component: SettingsComponent},
-  {path: 'verify', component: VerifyPdfComponent},
+  {path: 'blockchain/settings', component: SettingsComponent},
+  {path: 'blockchain/verify', component: VerifyPdfComponent},
   {path: 'new/transaction', component: CreateTransactionComponent },
   {path: 'new/transaction/pending', component: PendingTransactionsComponent },
   {path: 'wallet/:address', component: WalletBalanceComponent },
