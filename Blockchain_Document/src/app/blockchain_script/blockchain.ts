@@ -11,6 +11,7 @@ const ec = new EC('secp256k1');
 
 // }
 class Transaction {
+  public id_B: any;
 	public fromAddress : any;
 	public file: any;
 	public timestamp: any;
@@ -21,12 +22,13 @@ class Transaction {
      * @param {string} toAddress
      * @param {string} file
      */
-    constructor(fromAddress: any, toAddress: any, file: any) {
+    constructor(fromAddress: any, file: any) {
         this.fromAddress = fromAddress;
         this.file = file;
         // let docsv = new DocumentSV();
         // docsv.Sign(this.file, 'src/app/Document/certificatea.pfx');
         this.timestamp = Date.now();
+        console.log(this.timestamp);
 
     }
 
@@ -87,6 +89,7 @@ class Transaction {
 }
 
 class Block {
+  public id_B: any;
 	public previousHash: any;
 	public timestamp: any;
 	public transactions: Transaction[];
@@ -99,11 +102,13 @@ class Block {
      * @param {string} previousHash
      */
     constructor(timestamp: number, transactions: Transaction[], previousHash: string) {
-        this.previousHash = previousHash;
+
+      this.previousHash = previousHash;
         this.timestamp = timestamp;
         this.transactions = transactions;
         this.nonce = 0;
         this.hash = this.calculateHash();
+
     }
 
     /**

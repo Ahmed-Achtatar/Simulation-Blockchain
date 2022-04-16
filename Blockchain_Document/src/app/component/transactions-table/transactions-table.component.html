@@ -5,7 +5,6 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">From</th>
-            <th scope="col">To</th>
             <th scope="col">File</th>
             <th scope="col">Timestamp</th>
             <th scope="col">Valid?</th>
@@ -24,13 +23,7 @@
           <br><small>(That's yours!)</small>
         </span>
             </td>
-            <td class="text-truncate" style="max-width: 100px;">
-                <a [routerLink]="['/wallet', tx.toAddress]">{{tx.toAddress}}</a>
 
-                <span class="text-muted" *ngIf="blockchainService.addressIsFromCurrentUser(tx.toAddress)">
-            <br><small>(That's yours!)</small>
-          </span>
-            </td>
             <td>
                 {{tx.file}}
                 <span *ngIf="tx.fromAddress === null" class="text-muted"><br><small>(Block reward)</small></span>

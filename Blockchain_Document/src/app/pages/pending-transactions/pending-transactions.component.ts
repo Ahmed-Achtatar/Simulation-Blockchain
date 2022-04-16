@@ -14,6 +14,7 @@ export class PendingTransactionsComponent implements OnInit {
   public justAddedTx = false;
 
   constructor(private http: HttpClient,private blockchainService: BlockchainService, private router: Router, private route: ActivatedRoute) {
+
     this.pendingTransactions = blockchainService.getPendingTransactions();
   }
 
@@ -30,7 +31,10 @@ export class PendingTransactionsComponent implements OnInit {
   minePendingTransactions() {
     this.miningInProgress = true;
     this.blockchainService.minePendingTransactions();
-    this.miningInProgress = false;
-    this.router.navigate(['/']);
+    this.blockchainService.RetrieveB();
+    this.blockchainService.RetrieveTr();
+    setTimeout(() => {this.blockchainService.mixBT();},1000);
+    setTimeout(() => { this.miningInProgress = false;this.router.navigate(['/'])},2000);
+
   }
 }

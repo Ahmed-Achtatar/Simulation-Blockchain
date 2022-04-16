@@ -17,6 +17,8 @@ if($_FILES){
   $target_file = $target_dir . basename($_FILES["myPDF"]["name"]);
   move_uploaded_file($_FILES["myPDF"]["tmp_name"], $target_file);
 
+
+  $url = $_REQUEST['url'];
   //Merging of the existing PDF pages to the final PDF
   $pageCount = $pdf->setSourceFile($target_file);
   for ($i = 1; $i <= $pageCount; $i++) {
@@ -108,7 +110,7 @@ $pdf->setSignature($certificate, $prkey, 'ahmedahmed', '', 2, $info);
 // // // *** set signature appearance ***
 
 // create content for signature (image and/or text)
-QRcode::png("coded number here","test.png");
+QRcode::png($url,"test.png");
 $pdf->Image('test.png', 180, 60, 15, 15, 'PNG');
 $pdf->Image('images/tcpdf_signature.png', 200, 50, 15, 15, 'PNG');
 

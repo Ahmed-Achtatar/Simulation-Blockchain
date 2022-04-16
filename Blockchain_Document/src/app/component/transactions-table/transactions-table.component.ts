@@ -10,7 +10,8 @@ export class TransactionsTableComponent implements OnInit {
   @Input()
   public transactions : any[] = [];
 
-  constructor(public blockchainService: BlockchainService) { }
+  constructor(public blockchainService: BlockchainService) {
+   }
 
   ngOnInit() {
   }

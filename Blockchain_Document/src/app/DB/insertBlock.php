@@ -20,10 +20,15 @@ include "db.php";
   $blockTSt = $_REQUEST["blockTSt"];
   $lastblockId;
 
+
 try{
 
     // on utilise prepare pour éviter les SQL Injections
-
+   $d = DateTime::createFromFormat('U.v', number_format($blockTSt /1000, 3, '.', ''));
+   $blockTSt = $d->format("Y-m-d H:i:s.u");
+  // $blockTSt = gmdate("Y-m-d H:i:s.u",$blockTSt);
+  // $d = new DateTime($blockTSt);
+  // echo $d->format('Y-m-d\TH:i:s.u');
   $stmt = $conn->prepare(" INSERT INTO `block` (`timestamp_B`, `previousHash_B`,`nonce_B`,`hash_B`,`id_BC`) VALUES (?,?,?,?,?); ");
   $stmt->bindParam(1,$blockTSt);
   $stmt->bindParam(2,$blockprev);
@@ -59,13 +64,19 @@ $stmt = $conn->prepare("SELECT max(id_B) as maxid FROM block");
   for($i = 1 ; $i <= $num ; $i++){
     $trfile = $_REQUEST["trfile".strval($i)];
     $trTSt = $_REQUEST["trTSt".strval($i)];
+
+    $d = DateTime::createFromFormat('U.v', number_format($trTSt/1000, 3, '.', ''));
+    $trTSt = $d->format("Y-m-d H:i:s.u");
+
+    echo json_encode($trTSt);
     $trAddress = $_REQUEST["trAddress".strval($i)];
     try{
-
+      echo json_encode($trTSt);
     $stmt = $conn->prepare(" INSERT INTO `transaction` (`fromHash_TR`,`docHash_TR`,`timestamp_TR`,`id_B`) VALUES (?,?,?,?); ");
     $stmt->bindParam(1,$trAddress);
     $stmt->bindParam(2,$trfile);
     $stmt->bindParam(3,$trTSt);
+    echo json_encode($trTSt);
     $stmt->bindParam(4,$idB);
 
     $stmt->execute();

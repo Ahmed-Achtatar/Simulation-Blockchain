@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { BlockViewComponent } from './component/block-view/block-view.component';
 import { BlockchainViewerComponent } from 'src/app/pages/blockchain-viewer/blockchain-viewer.component';
 import { SettingsComponent } from 'src/app/pages/settings/settings.component';
 import { CreateTransactionComponent } from 'src/app/pages/create-transaction/create-transaction.component';
@@ -8,8 +9,9 @@ import { WalletBalanceComponent } from 'src/app/pages/wallet-balance/wallet-bala
 import { VerifyPdfComponent } from 'src/app/pages/verify-pdf/verify-pdf.component';
 
 const routes: Routes = [
-
   {path: '', component: BlockchainViewerComponent },
+  {path: ':idb', component: BlockchainViewerComponent },
+  // {path: 'block/:idb', component: BlockViewComponent },
   {path: 'settings', component: SettingsComponent},
   {path: 'verify', component: VerifyPdfComponent},
   {path: 'new/transaction', component: CreateTransactionComponent },
@@ -18,7 +20,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{preloadingStrategy: PreloadAllModules})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

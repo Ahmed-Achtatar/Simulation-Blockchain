@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BlockchainService } from '../../services/blockchain.service';
 @Component({
   selector: 'app-blockchain-viewer',
@@ -9,24 +10,38 @@ export class BlockchainViewerComponent implements OnInit {
   public id: number | any = 1;
 
   public blocks:any = [];
-  public selectedBlock:any = null;
+  public selectedBlock: any|null;
 
-  constructor(private blockchainService: BlockchainService) {
-    this.blockchainService.RetrieveB();
-    this.blockchainService.RetrieveTr();
-    this.blocks = blockchainService.blockchainInstance.chain;
+  constructor(private router: Router,private route: ActivatedRoute,private blockchainService: BlockchainService) {
+    this.blocks = [];
+    this.blockchainService.retrieve();
+    this.blocks = this.blockchainService.blockchainInstance.chain;
     this.selectedBlock = this.blocks[0];
-    console.log(this.blocks);
+    setTimeout(() => {this.selectedBlock = this.blocks.find(el => el.id_B == this.blockchainService.selectedId)},1100);
+
   }
 
+
+
+
+  async retrieved(){}
   ngOnInit() {
+    this.route.params.subscribe( (params) => {
+      this.blockchainService.selectedId = params['idb'];
+      console.log("idb =" + this.blockchainService.selectedId);
+    });
   }
 
   showTransactions(block: any) {
     console.log(block);
+
     this.selectedBlock = block;
+    this.blockchainService.selectedId = this.selectedBlock.id_B;
+    this.router.navigate(['',this.blockchainService.selectedId]);
     return false;
   }
+
+
 
   blockHasTx(block: any) {
     return block.transactions.length > 0;
@@ -41,6 +56,6 @@ export class BlockchainViewerComponent implements OnInit {
   }
 
   getBlockNumber(block: any) {
-    return this.blocks.indexOf(block) + 1;
+    return this.blockchainService.selectedId;
   }
 }

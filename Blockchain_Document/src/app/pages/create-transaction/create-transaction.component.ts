@@ -13,15 +13,16 @@ import { map } from 'rxjs';
   styleUrls: ['./create-transaction.component.scss']
 })
 export class CreateTransactionComponent implements OnInit {
-  public newTx = new Transaction(0,0,0);
+  public newTx = new Transaction(0,0);
   public chemin : any;
   public ownWalletKey: IWalletKey;
   public data: any;
   public selectedFile : File | any;
   constructor(private blockchainService: BlockchainService, private router: Router,private http: HttpClient) {
+
     // this.newTx = new Transaction(0,0,0);
     this.ownWalletKey = blockchainService.walletKeys[0];
-
+    this.blockchainService.retrieve();
 
   }
 
@@ -35,8 +36,9 @@ export class CreateTransactionComponent implements OnInit {
 
   uploadPDF(){
     const uploadDT = new FormData();
-
+    const url = "http://localhost:4200/" + (this.blockchainService.blockchainInstance.getLatestBlock().id_B + 1).toString();
     uploadDT.append("myPDF",this.selectedFile,this.selectedFile.name);
+    uploadDT.append("url",url);
     this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/upload.php',uploadDT,{
       reportProgress: true,
       observe: 'events'
@@ -68,13 +70,12 @@ export class CreateTransactionComponent implements OnInit {
     })}, 1000);
   }
 
-  async createTransaction() {
+  createTransaction() {
      this.uploadPDF();
-    this.hashPDF();
-
+     this.hashPDF();
 
     // uploadDT.append("number",blockNum);
 
-    await this.router.navigate(['/new/transaction/pending', { addedTx: true }]);
+    this.router.navigate(['/new/transaction/pending', { addedTx: true }]);
   }
 }
