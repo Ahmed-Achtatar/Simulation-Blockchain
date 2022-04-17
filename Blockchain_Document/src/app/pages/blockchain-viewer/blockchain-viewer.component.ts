@@ -18,19 +18,15 @@ export class BlockchainViewerComponent implements OnInit {
     this.blocks = this.blockchainService.blockchainInstance.chain;
     this.selectedBlock = this.blocks[0];
     setTimeout(() => {this.selectedBlock = this.blocks.find(el => el.id_B == this.blockchainService.selectedId)},1100);
-
   }
-  async retrieved(){}
+
   ngOnInit() {
     this.route.params.subscribe( (params) => {
       this.blockchainService.selectedId = params['idb'];
-      console.log("idb =" + this.blockchainService.selectedId);
     });
   }
 
   showTransactions(block: any) {
-    console.log(block);
-
     this.selectedBlock = block;
     this.blockchainService.selectedId = this.selectedBlock.id_B;
     this.router.navigate(['',this.blockchainService.selectedId]);

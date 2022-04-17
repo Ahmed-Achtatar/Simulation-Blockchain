@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { BlockchainService, IWalletKey } from '../../services/blockchain.service';
-
-import { Transaction } from "../../blockchain_script/blockchain";
-import * as bAll from "../../blockchain_script/blockchain";
-import { map } from 'rxjs';
+import { Transaction } from "../../Blockchain/blockchain";
 
 @Component({
   selector: 'app-create-transaction',
@@ -31,7 +28,6 @@ export class CreateTransactionComponent implements OnInit {
   }
   onFileChanged(event) {
     this.selectedFile = event.target.files[0];
-    console.log(event);
   }
 
   uploadPDF(){
@@ -39,25 +35,21 @@ export class CreateTransactionComponent implements OnInit {
     const url = "http://localhost:4200/" + (this.blockchainService.blockchainInstance.getLatestBlock().id_B + 1).toString();
     uploadDT.append("myPDF",this.selectedFile,this.selectedFile.name);
     uploadDT.append("url",url);
-    this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/upload.php',uploadDT,{
+    this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/dbOperations/upload.php',uploadDT,{
       reportProgress: true,
       observe: 'events'
     })
     .subscribe(event => {
-      console.log(event);
-
     });
   }
 
   hashPDF(){
     setTimeout(() => {
-    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/pages/create-transaction/hash.php')
+    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/dbOperations/hash.php')
     .subscribe((response) => {
-
       this.data = response;
-      console.log(this.data);
       const newTx = this.newTx;
-      newTx.file =response;
+      newTx.filePath =response;
     // Set the FROM address and sign the transaction
       newTx.fromAddress = this.ownWalletKey.publicKey;
       newTx.signTransaction(this.ownWalletKey.keyObj);
