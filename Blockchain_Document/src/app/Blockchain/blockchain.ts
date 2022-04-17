@@ -25,7 +25,6 @@ class Transaction {
         this.fromAddress = fromAddress;
         this.filePath = filePath;
         this.timestamp = Date.now();
-        console.log(this.timestamp);
     }
 
     /**
