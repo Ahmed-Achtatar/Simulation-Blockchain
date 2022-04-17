@@ -1,4 +1,4 @@
-<div class="card" [class.border-primary]="isSelectedBlock()">
+<div class="card" [class.selected]="isSelectedBlock()">
 
     <div class="card-body">
         <h5 class="card-title">Block {{ getBlockNumber() }} <small class="text-muted" *ngIf="block.previousHash == 0">(Genesis block)</small></h5>
@@ -8,7 +8,7 @@
         <li class="list-group-item">
             <span class="">Hash</span>
             <br>
-            <div class="text-truncate" [style.color]="'#' + block.hash.substring(0,6)">
+            <div class="text-wrap" [style.color]="'#' + block.hash.substring(0,6)">
                 <small>{{ block.hash }}</small>
             </div>
 
@@ -16,21 +16,21 @@
             <span class="">Hash of previous block</span>
             <br>
 
-            <div class="text-truncate" [style.color]="'#' + block.previousHash.substring(0,6)">
+            <div class="text-wrap" [style.color]="'#' + block.previousHash.substring(0,6)">
                 <small>{{ block.previousHash }}</small>
             </div>
         </li>
 
         <li class="list-group-item">
             <span class="">Nonce</span><br>
-            <div class="text-truncate text-muted">
+            <div class="text-wrap text-muted">
                 <small>{{ block.nonce }}</small>
             </div>
         </li>
 
         <li class="list-group-item">
             <span class="">Timestamp</span><br>
-            <div class="text-truncate text-muted">
+            <div class="text-wrap text-muted">
                 <small>{{ block.timestamp }}</small>
             </div>
         </li>

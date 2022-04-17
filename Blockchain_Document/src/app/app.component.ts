@@ -1,3 +1,6 @@
+import { faFilePdf } from '@fortawesome/free-regular-svg-icons';
+import { faCube } from '@fortawesome/free-solid-svg-icons';
+
 import { Component, OnInit } from '@angular/core';
 import { BlockchainService } from './services/blockchain.service';
 
@@ -9,6 +12,8 @@ import { BlockchainService } from './services/blockchain.service';
 export class AppComponent implements OnInit {
   public blockchain;
   public showInfoMessage = true;
+  public faFilePdf = faFilePdf;
+public faCube =faCube
 
   constructor(private blockchainService: BlockchainService) {
     this.blockchain = blockchainService.blockchainInstance;

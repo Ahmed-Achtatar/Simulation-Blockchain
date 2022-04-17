@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BlockchainService } from '../../services/blockchain.service';
-
+import { faFilePdf } from '@fortawesome/free-regular-svg-icons';
+import { faCube } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-block-view',
   templateUrl: './block-view.component.html',
@@ -14,7 +15,8 @@ export class BlockViewComponent implements OnInit {
   public selectedBlock : any;
 
   private blocksInChain;
-
+  public faFilePdf =faFilePdf;
+  public faCube=faCube;
   constructor(private blockchainService: BlockchainService) {
     this.blocksInChain = blockchainService.blockchainInstance.chain;
   }

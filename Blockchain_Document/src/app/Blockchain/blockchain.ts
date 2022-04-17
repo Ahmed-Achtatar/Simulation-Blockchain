@@ -10,7 +10,7 @@ const ec = new EC('secp256k1');
 class Transaction {
   public id_B: any;
 	public fromAddress : any;
-	public filePath: any;
+	public fileHash: any;
 	public timestamp: any;
 	public signature: any;
 
@@ -23,7 +23,7 @@ class Transaction {
 
     constructor(fromAddress: any, filePath: any) {
         this.fromAddress = fromAddress;
-        this.filePath = filePath;
+        this.fileHash = filePath;
         this.timestamp = Date.now();
     }
 
@@ -33,7 +33,7 @@ class Transaction {
      */
 
     calculateHash() : string {
-        return CryptoJS.SHA256(this.fromAddress + this.filePath + this.timestamp).toString();
+        return CryptoJS.SHA256(this.fromAddress + this.fileHash + this.timestamp).toString();
     }
 
     /**
@@ -145,24 +145,16 @@ class Block {
 // ----------------------------------------------------------------------------------------------
 
 class Blockchain {
-	public dt: any;
+	public timestamp: any;
 	public chain: any;
 	public difficulty: any;
 	public pendingTransactions: any;
 
     constructor() {
-        this.dt = Date.now();
-        this.chain = [this.createGenesisBlock()];
+        this.timestamp = Date.now();
+        this.chain = [new Block(this.timestamp, [], '')];
         this.difficulty = 2;
         this.pendingTransactions = [];
-    }
-
-    /**
-     * @returns {Block}
-     */
-
-    createGenesisBlock(): Block {
-        return new Block(this.dt, [], '');
     }
 
     /**
@@ -239,7 +231,7 @@ class Blockchain {
     isChainValid(): boolean {
         // Vérifiez si le bloc Genesis n'a pas été falsifié en comparant
         // la sortie de createGenesisBlock avec le premier bloc de notre chaîne
-        const realGenesis = JSON.stringify(this.createGenesisBlock());
+        const realGenesis = JSON.stringify(new Block(this.timestamp, [], ''));/////TODOO
         if (realGenesis !== JSON.stringify(this.chain[0])) {
             return false;
         }

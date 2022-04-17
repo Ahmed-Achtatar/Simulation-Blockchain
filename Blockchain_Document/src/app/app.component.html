@@ -1,11 +1,12 @@
-<nav class="navbar navbar-dark ">
+<nav class="navbar navbar-light justify-content-around sticky-top">
     <a class="navbar-brand" routerLink="/">
-        BlockDoc
+        <fa-icon [icon]="faCube" size="2x"></fa-icon>
+        <fa-icon [icon]="faFilePdf" size="2x"></fa-icon>
     </a>
     <div>
         <button routerLink="/new/transaction/pending" class="btn btn-outline-light" *ngIf="thereArePendingTransactions()">
       Pending transactions
-      <span class="badge badge-light">{{blockchain.pendingTransactions.length}}</span>
+      <span class="badge badge-dark">{{blockchain.pendingTransactions.length}}</span>
     </button> &nbsp;
         <button routerLink="blockchain/settings" class="btn btn-outline-light">
       Settings

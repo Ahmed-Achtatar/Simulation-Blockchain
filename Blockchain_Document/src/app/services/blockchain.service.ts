@@ -86,7 +86,7 @@ RetrieveB(){
     var num: number = 0;
     this.blockchainInstance.getLatestBlock().transactions.forEach(t => {
       num++;
-      uploadDT.append("trfile" + num ,t.filePath);
+      uploadDT.append("trfile" + num ,t.fileHash);
       uploadDT.append("trTSt" + num ,t.timestamp);
       uploadDT.append("trAddress" + num ,t.fromAddress);
     });

@@ -49,7 +49,7 @@ export class CreateTransactionComponent implements OnInit {
     .subscribe((response) => {
       this.data = response;
       const newTx = this.newTx;
-      newTx.filePath =response;
+      newTx.fileHash =response;
     // Set the FROM address and sign the transaction
       newTx.fromAddress = this.ownWalletKey.publicKey;
       newTx.signTransaction(this.ownWalletKey.keyObj);
