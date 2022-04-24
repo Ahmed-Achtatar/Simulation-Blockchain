@@ -8,7 +8,7 @@ import { BlockchainService } from '../../services/blockchain.service';
 })
 export class BlockchainViewerComponent implements OnInit {
   public id: number | any = 1;
-
+  public isLoading = true;
   public blocks:any = [];
   public selectedBlock: any|null;
 
@@ -17,7 +17,11 @@ export class BlockchainViewerComponent implements OnInit {
     this.blockchainService.retrieve();
     this.blocks = this.blockchainService.blockchainInstance.chain;
     this.selectedBlock = this.blocks[0];
-    setTimeout(() => {this.selectedBlock = this.blocks.find(el => el.id_B == this.blockchainService.selectedId)},1100);
+    setTimeout(() => {
+      this.selectedBlock = this.blocks.find(el => el.id_B == this.blockchainService.selectedId);
+      this.isLoading = false;
+    },1100);
+
   }
 
   ngOnInit() {
@@ -30,6 +34,7 @@ export class BlockchainViewerComponent implements OnInit {
     this.selectedBlock = block;
     this.blockchainService.selectedId = this.selectedBlock.id_B;
     this.router.navigate(['',this.blockchainService.selectedId]);
+    console.log(this.selectedBlock);
     return false;
   }
 

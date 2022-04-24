@@ -1,3 +1,6 @@
+<div *ngIf="isLoading" class="overlays d-flex fixed-top h-100 w-100 justify-content-center align-items-center" style="background-color: black; opacity: 0.9;">
+    <img *ngIf="isLoading" src="../../../assets/spinner.gif" alt="" style="width: 100px; height :  100px">
+</div>
 <div class="container-fluid py-3 cont1 ">
     <h1 py-3><strong> BLOCKS IN CHAIN</strong></h1>
     <p>Each card represents a block on the chain. Click on a block to see the transactions stored inside.</p>

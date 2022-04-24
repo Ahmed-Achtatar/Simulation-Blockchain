@@ -13,7 +13,8 @@ export class AppComponent implements OnInit {
   public blockchain;
   public showInfoMessage = true;
   public faFilePdf = faFilePdf;
-public faCube =faCube
+  public faCube =faCube;
+  
 
   constructor(private blockchainService: BlockchainService) {
     this.blockchain = blockchainService.blockchainInstance;

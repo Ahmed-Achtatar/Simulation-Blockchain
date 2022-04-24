@@ -8,7 +8,7 @@ const ec = new EC('secp256k1');
 // ----------------------------------------------------------------------------------------------
 
 class Transaction {
-  public id_B: any;
+  public id_B: number | any;
 	public fromAddress : any;
 	public fileHash: any;
 	public timestamp: any;
@@ -79,7 +79,7 @@ class Transaction {
 // ----------------------------------------------------------------------------------------------
 
 class Block {
-  public id_B: any;
+  public id_B: number | any;
 	public previousHash: any;
 	public timestamp: any;
 	public transactions: Transaction[];

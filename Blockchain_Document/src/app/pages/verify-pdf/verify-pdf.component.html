@@ -1,10 +1,20 @@
-<div class="container">
+<div class="container p-5">
     <h1>Verify PDF</h1>
     <p>Upload a PDF file to verify</p>
 
     <br>
     <div class="form-group">
         <input type="file" id="file" name="file" (change)="onFileChanged($event)">
+
+        <p *ngIf="isFileSize == false" class="m-3 text-warning">
+            <fa-icon [icon]="faTriangleExclamation"></fa-icon> veuillez choisir un fichier PDF de taille moins de 5mb</p>
     </div>
-    <button (click)="verifyPDF()" type="submit" class="btn btn-primary">Verify</button>
+    <button [disabled]="isLoading" (click)="verifyPDF()" type="submit" class="btn btn-primary">
+      <img *ngIf="isLoading" src="../../../assets/spinner.gif" alt="" style="width: 25px">
+       Verify
+      </button>
+    <span *ngIf="isLoading" class="mx-3">Please Wait</span>
+    <span *ngIf="result == 0"> le fichier n'existe pas dans la blockchain</span>
+    <span *ngIf="result == 1"> le fichier existe dans la blockchain</span>
+
 </div>

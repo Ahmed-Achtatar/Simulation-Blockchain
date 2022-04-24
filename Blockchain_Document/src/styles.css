@@ -6,7 +6,7 @@ h1 {
     /* background-color: #52796f; */
 }
 
-p,
+input[type="file"],
 h5,
 label,
 .card-link,
@@ -14,9 +14,17 @@ span {
     color: #fff !important;
 }
 
+p {
+    color: #90DDF0 !important;
+}
+
 .text-muted small {
     font-weight: 800 !important;
-    color: #fff;
+    color: black;
+}
+
+small.text-muted {
+    color: #fff !important;
 }
 
 small {
@@ -31,7 +39,11 @@ h5 {
 
 body {
     font-family: Helvetica !important;
-    background-color: #001A2A !important;
+    background-color: #0A090C !important;
+    background-color: #0A090C;
+    /* opacity: 0.9; */
+    background: radial-gradient(circle, transparent 20%, #0A090C 20%, #0A090C 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #0A090C 20%, #0A090C 80%, transparent 80%, transparent) 100px 100px, linear-gradient(#2C666E 8px, transparent 8px) 0 -4px, linear-gradient(90deg, #2C666E 8px, #0A090C 8px) -4px 0;
+    background-size: 200px 200px, 200px 200px, 100px 100px, 100px 100px;
 }
 
 ::-webkit-scrollbar {

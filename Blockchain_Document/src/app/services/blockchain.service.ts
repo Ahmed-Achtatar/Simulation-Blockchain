@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as BC from "../Blockchain/blockchain";
 import { HttpClient } from '@angular/common/http';
+import { interval, take, lastValueFrom } from 'rxjs';
 import * as EC from 'elliptic';
 @Injectable({
   providedIn: 'root'
@@ -21,19 +22,27 @@ export class BlockchainService {
     this.ownWalletKey = this.walletKeys[0];
   }
 
-retrieve (){
-  this.RetrieveB();
-  this.RetrieveTr();
-  setTimeout(() => {this.mixBT();},1000);
+async retrieve (){
+  await this.RetrieveB();
+  await this.RetrieveTr();
+  await this.mixBT();
 }
 
-RetrieveB(){
+verify(hash){
+  var isvalid = false;
+  this.arrayT.forEach(t => {
+    if(hash == t.fileHash){
+      isvalid = true;
+    }
+  });
+  return isvalid;
+}
+
+async RetrieveB(){
     this.arrayB = [new BC.Block(Date.now(),[], '')];
-    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/dbOperations/retrieveB.php')
-    .subscribe((response) => {
     var ret ;
-    ret = response;
-    ret.forEach(b => {
+    ret = await lastValueFrom(this.http.get('http://blockchain.madot.ma/assets/dbOperations/retrieveB.php'))
+    await ret.forEach(b => {
       var bl = new BC.Block(b.timestamp_B,[],b.previousHash_B);
       bl.hash = b.hash_B;
       bl.id_B = b.id_B;
@@ -41,27 +50,24 @@ RetrieveB(){
       this.arrayB.push(bl);
     });
     this.arrayB.shift();
-    });
   }
 
-  RetrieveTr(){
+  async RetrieveTr(){
     this.arrayT = [new BC.Transaction('','')];
-    this.http.get('http://localhost/Blockchain/Blockchain_Document/src/app/dbOperations/retrieveTr.php')
-    .subscribe((response) => {
+
     var ret ;
-    ret = response;
-    ret.forEach(t =>{
+    ret = await lastValueFrom(this.http.get('http://blockchain.madot.ma/assets/dbOperations/retrieveTr.php'));
+    await ret.forEach(t =>{
       var tr = new BC.Transaction(t.fromHash_TR,t.docHash_TR);
       tr.id_B = t.id_B;
       tr.timestamp= t.timestamp_TR;
       this.arrayT.push(tr);
     });
     this.arrayT.shift();
-    });
   }
 
-  mixBT(){
-    this.blockchainInstance.chain.splice(0,this.blockchainInstance.chain.length);
+ async mixBT(){
+    await this.blockchainInstance.chain.splice(0,this.blockchainInstance.chain.length);
     this.arrayB.forEach(bl => {
       this.arrayT.forEach(tr => {
         if(tr.id_B == bl.id_B){
@@ -74,7 +80,7 @@ RetrieveB(){
     });
   }
 
-  minePendingTransactions() {
+  async minePendingTransactions() {
     this.blockchainInstance.minePendingTransactions(
       this.walletKeys[0].publicKey
     );
@@ -92,12 +98,10 @@ RetrieveB(){
     });
     uploadDT.append("num",num.toString());
 
-    this.http.post('http://localhost/Blockchain/Blockchain_Document/src/app/dbOperations/insertBlock.php',uploadDT,{
+    await lastValueFrom(this.http.post('http://blockchain.madot.ma/assets/dbOperations/insertBlock.php',uploadDT,{
       reportProgress: true,
       observe: 'events'
-    })
-    .subscribe(event => {
-    });
+    }))
   }
 
   addressIsFromCurrentUser(address: any) {

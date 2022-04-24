@@ -11,6 +11,7 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 
 if($_FILES){
   $pdf = new TCPDI(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+  // header("Content-type: application/PDF");
   $target_dir = "../assets/uploaded/";
   $target_file = $target_dir . basename($_FILES["myPDF"]["name"]);
   move_uploaded_file($_FILES["myPDF"]["tmp_name"], $target_file);
@@ -43,7 +44,31 @@ $pdf->Image('test.png', 180, 60, 15, 15, 'PNG');
 
 $pdf->setSignatureAppearance(180, 60, 15, 15);
 $pdf->addEmptySignatureAppearance(180, 80, 15, 15);
+// ob_get_clean();
+// $pdf->Output("myPDF.pdf", 'I');
 $pdf->Output(__DIR__ ."/../assets/uploaded/etest.pdf", 'F');
+$data = file_get_contents("http://localhost/Blockchain/Blockchain_Document/src/app/assets/uploaded/etest.pdf");
+  header("Content-type: application/octet-stream");
+  header("Content-disposition: attachment;filename=YOURFILE.pdf");
+
+  echo $data;
+// $filePath = __DIR__ ."/../assets/uploaded/etest.pdf";
+// $fileName= "etest.pdf";
+
+// $file = readfile($filePath);
+// echo $file;
+// header('Content-Description: File Transfer');
+// header("Content-type: application/PDF");
+// header("Content-disposition: attachment; filename=" .basename($file));
+// header('Content-Transfer-Encoding: binary');
+// header('Expires: 0');
+// header('Cache-Control: must-revalidate');
+// header("Pragma: public");
+// header("content-length: ". filesize($file));
+// ob_clean();
+// flush();
+// readfile($file);
+
 
 }
 

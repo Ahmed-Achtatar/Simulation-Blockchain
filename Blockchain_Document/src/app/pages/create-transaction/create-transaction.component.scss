@@ -1,7 +1,29 @@
 input#file::-webkit-file-upload-button {
-    background-color: #007bff;
+    background-color: #2C666E;
     color: white;
-    border: #007bff;
+    border: #2C666E;
     border-radius: 3px;
     padding: 9px;
+}
+
+input#file::-webkit-file-upload-button:hover {
+    background-color: white;
+    color: #07393C;
+    cursor: pointer;
+}
+
+button {
+    background-color: #2C666E;
+    border: #2C666E;
+}
+
+button:hover {
+    background-color: white;
+    color: #07393C;
+}
+
+.container {
+    background-color: #07393C;
+    opacity: 0.9;
+    box-shadow: 0px 10px #2C666E !important;
 }

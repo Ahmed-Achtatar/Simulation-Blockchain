@@ -14,6 +14,7 @@ import { CreateTransactionComponent } from './pages/create-transaction/create-tr
 import { PendingTransactionsComponent } from './pages/pending-transactions/pending-transactions.component';
 import { WalletBalanceComponent } from './pages/wallet-balance/wallet-balance.component';
 import { VerifyPdfComponent } from './pages/verify-pdf/verify-pdf.component';
+import { HashLocationStrategy,LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { VerifyPdfComponent } from './pages/verify-pdf/verify-pdf.component';
     FontAwesomeModule
   ],
   providers: [
+    { provide :LocationStrategy, useClass: HashLocationStrategy} ,
     BlockchainService
   ],
   bootstrap: [AppComponent]

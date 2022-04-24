@@ -14,7 +14,7 @@ export class PendingTransactionsComponent implements OnInit {
   public justAddedTx = false;
 
   constructor(private http: HttpClient,private blockchainService: BlockchainService, private router: Router, private route: ActivatedRoute) {
-
+    this.blockchainService.retrieve();
     this.pendingTransactions = blockchainService.getPendingTransactions();
   }
 

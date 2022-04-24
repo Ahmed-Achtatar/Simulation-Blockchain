@@ -1,27 +1,28 @@
 .card {
+    cursor: pointer;
     z-index: 3;
     width: 18rem;
-    background-color: #072030 !important;
-    border: #072030;
+    background-color: #07393C !important;
+    border: #07393C;
     margin: 0 50px 0 0;
     display: inline-block;
     transition: all 200ms ease-out;
-    box-shadow: 10px 10px 0px -3px #000D15, 10px 10px #96ffd8;
+    box-shadow: 10px 10px 0px -3px #000D15, 10px 10px #90DDF0;
 }
 
 .text-wrap {
     white-space: normal !important;
     word-break: break-word !important;
-    background-color: #7da97a;
+    background-color: #90DDF0;
     padding: 5px;
     border-radius: 10px;
 }
 
 .selected {
-    box-shadow: 10px 10px #96ffd8, 20px 20px 0px -3px #000D15, 20px 20px #96ffd8;
+    box-shadow: 10px 10px #90DDF0, 20px 20px 0px -3px #000D15, 20px 20px #90DDF0;
     transform: translate(-10px, -10px);
 }
 
 .list-group-item {
-    background-color: #072030 !important;
+    background-color: #07393C !important;
 }

@@ -1,11 +1,17 @@
 .navbar {
-    background-color: #000d15;
-    box-shadow: 0px 1px 1px 1px #000 !important;
+    background-color: #fff;
+    box-shadow: 0px 1px 1px 1px #4C5E67 !important;
 }
 
 a,
 button {
-    color: #fff !important;
+    color: #2C666E !important;
 }
 
-button {}
+button:hover {
+    color: #000d15 !important;
+}
+
+button {
+    border: 1px solid #2C666E !important;
+}

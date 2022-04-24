@@ -1,6 +1,6 @@
-<div class="container">
+<div class="container p-5">
     <h1>Create transaction</h1>
-    <p>Transfer some money to someone!</p>
+    <p>Signer un fichier PDF et ajouter son Hash dans la Blockchain</p>
 
     <br>
 
@@ -8,12 +8,17 @@
         <label for="fromAddress">From address</label>
         <input type="text" class="form-control" id="fromAddress" aria-describedby="fromAddressHelp" [(ngModel)]="ownWalletKey.publicKey" disabled>
         <small id="fromAddressHelp" class="form-text text-muted">
-	    	This is your wallet address. You cannot change it because you can only spend your own coins.
+	    	C'est votre adresse publique, vous ne pouvez pas la changer.
 	    </small>
     </div>
-    <div>{{this.data}}</div>
     <div class="form-group">
         <input type="file" id="file" name="file" (change)="onFileChanged($event)" accept="application/pdf">
+        <p *ngIf="isFileSize == false" class="m-3 text-warning">
+            <fa-icon [icon]="faTriangleExclamation"></fa-icon> veuillez choisir un fichier PDF de taille moins de 5mb</p>
     </div>
-    <button (click)="createTransaction()" type="submit" class="btn btn-primary">Sign & create transaction</button>
+    <button (click)="createTransaction()" type="submit" class="btn btn-primary">
+      <img *ngIf="isLoading" src="../../../assets/spinner.gif" alt="" style="width: 25px">
+      Sign & create transaction</button>
+    <span *ngIf="isLoading" class="mx-3">Please Wait</span>
+
 </div>
