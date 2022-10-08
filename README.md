@@ -1,5 +1,5 @@
 ###### This project is made made by: Ahmed Achtatar & Omar El Alami 
-# Demo: http://blockchain.madot.ma/
+# Demo: https://blockchain.tech-chro.ma/ (link changed to this)
 # What is it about?
 ```
 - first folder is a basic simulation about the blockchain using basic html/css/js
